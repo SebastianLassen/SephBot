@@ -1,3 +1,6 @@
+# SephBot
+This is a bot based on Dave Churchill's STARTcraft bot https://github.com/davechurchill/STARTcraft
+
 # STARTcraft
 
 Get started with Starcraft AI Development as fast as possible. 
