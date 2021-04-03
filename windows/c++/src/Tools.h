@@ -1,6 +1,7 @@
 #pragma once
 
 #include <BWAPI.h>
+#include "BuildingData.h"
 
 namespace Tools
 {
@@ -9,8 +10,9 @@ namespace Tools
 
     int CountUnitsOfType(BWAPI::UnitType type, const BWAPI::Unitset& units);
 
-    BWAPI::Unit GetUnitOfType(BWAPI::UnitType type);
+    BWAPI::Unit GetUnitOfType(BWAPI::UnitType type, bool isWorker);
     BWAPI::Unit GetDepot();
+    BWAPI::Unit findBuilderUnit(const Building & b);
 
     bool BuildBuilding(BWAPI::UnitType type);
 

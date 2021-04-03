@@ -16,6 +16,9 @@ class MapTools
     int         m_frame = 0;
     bool        m_drawMap = false;
 
+    BWAPI::TilePosition     enemyBaseLocation;
+    BWAPI::TilePosition     selfBaseLocation;
+
     bool canBuild(int tileX, int tileY) const;
     bool canWalk(int tileX, int tileY) const;
     void printMap() const;
@@ -47,4 +50,8 @@ public:
     bool    isBuildable(const BWAPI::TilePosition& tile) const;
     bool    isDepotBuildableTile(int tileX, int tileY) const;
     void    drawTile(int tileX, int tileY, const BWAPI::Color & color) const;
+    void    setEnemyStartLocation(BWAPI::TilePosition);
+
+    BWAPI::TilePosition   getEnemyStartLocation();
+    BWAPI::TilePosition   getSelfStartLocation();
 };

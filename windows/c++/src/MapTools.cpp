@@ -13,12 +13,14 @@ MapTools::MapTools()
 
 void MapTools::onStart()
 {
-    m_width          = BWAPI::Broodwar->mapWidth();
-    m_height         = BWAPI::Broodwar->mapHeight();
-    m_walkable       = Grid<int>(m_width, m_height, 1);
-    m_buildable      = Grid<int>(m_width, m_height, 0);
-    m_depotBuildable = Grid<int>(m_width, m_height, 0);
-    m_lastSeen       = Grid<int>(m_width, m_height, 0);
+    m_width             = BWAPI::Broodwar->mapWidth();
+    m_height            = BWAPI::Broodwar->mapHeight();
+    m_walkable          = Grid<int>(m_width, m_height, 1);
+    m_buildable         = Grid<int>(m_width, m_height, 0);
+    m_depotBuildable    = Grid<int>(m_width, m_height, 0);
+    m_lastSeen          = Grid<int>(m_width, m_height, 0);
+    enemyBaseLocation   = BWAPI::TilePositions::Unknown;
+    selfBaseLocation    = BWAPI::Broodwar->self()->getStartLocation();
 
     // Set the boolean grid data from the Map
     for (int x(0); x < m_width; ++x)
@@ -278,6 +280,20 @@ void MapTools::draw() const
     BWAPI::Broodwar->drawTextScreen(60, 60, "%cResource Tile, Can't Build", white);
     BWAPI::Broodwar->drawTextScreen(10, 75, "Teal:");
     BWAPI::Broodwar->drawTextScreen(60, 75, "%cCan't Build Depot", white);
+   
+}
 
-    
+void MapTools::setEnemyStartLocation(BWAPI::TilePosition)
+{
+
+}
+
+BWAPI::TilePosition MapTools::getEnemyStartLocation()
+{
+    return enemyBaseLocation;
+}
+
+BWAPI::TilePosition MapTools::getSelfStartLocation()
+{
+    return selfBaseLocation;
 }

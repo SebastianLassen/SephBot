@@ -1,12 +1,16 @@
 #pragma once
 
 #include "MapTools.h"
+#include "ProductionManager.h"
 
 #include <BWAPI.h>
 
 class SephBot
 {
-    MapTools m_mapTools;
+    MapTools			p_mapTools;
+	ProductionManager	p_productionManager;
+
+	BWAPI::Unit p_scout = nullptr;
 
 public:
 
@@ -17,6 +21,9 @@ public:
     void trainAdditionalWorkers();
     void buildAdditionalSupply();
     void drawDebugInformation();
+
+	// extended
+	void sendScout();
 
     // functions that are triggered by various BWAPI events from main.cpp
 	void onStart();

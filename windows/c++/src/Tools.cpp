@@ -1,5 +1,6 @@
 #include "Tools.h"
 
+
 BWAPI::Unit Tools::GetClosestUnitTo(BWAPI::Position p, const BWAPI::Unitset& units)
 {
     BWAPI::Unit closestUnit = nullptr;
@@ -35,15 +36,28 @@ int Tools::CountUnitsOfType(BWAPI::UnitType type, const BWAPI::Unitset& units)
     return sum;
 }
 
-BWAPI::Unit Tools::GetUnitOfType(BWAPI::UnitType type)
+
+BWAPI::Unit Tools::GetUnitOfType(BWAPI::UnitType type, bool isWorker)
 {
     // For each unit that we own
     for (auto& unit : BWAPI::Broodwar->self()->getUnits())
     {
-        // if the unit is of the correct type, and it actually has been constructed, return it
-        if (unit->getType() == type && unit->isCompleted())
+        if (isWorker)
         {
-            return unit;
+            // we need a worker, so far just take on that is gathering minerals
+            // Really need a workerJob enum so that workers that are assigned important tasks are ignored
+            if (unit->getType() == type && unit->isCompleted() && unit->getDistance(Tools::GetDepot()) < 8)
+            {
+                return unit;
+            }
+        }
+        else
+        {
+            // if the unit is of the correct type, and it actually has been constructed, return it
+            if (unit->getType() == type && unit->isCompleted())
+            {
+                return unit;
+            }
         }
     }
 
@@ -54,7 +68,30 @@ BWAPI::Unit Tools::GetUnitOfType(BWAPI::UnitType type)
 BWAPI::Unit Tools::GetDepot()
 {
     const BWAPI::UnitType depot = BWAPI::Broodwar->self()->getRace().getResourceDepot();
-    return GetUnitOfType(depot);
+    return GetUnitOfType(depot, false);
+}
+
+BWAPI::Unit Tools::findBuilderUnit(const Building& b)
+{
+    BWAPI::Unit closestWorker = nullptr;
+    double closestDistance = 0;
+
+    // Generalized function, as more specific conditions might be implemented later
+    for (auto& unit : BWAPI::Broodwar->self()->getUnits())
+    {
+        if (!unit->getType().isWorker()) { continue; }
+        if (unit->isCompleted() && unit->isGatheringMinerals())
+        {
+            const double distance = unit->getDistance(BWAPI::Position(b.position));
+            if (!closestWorker || distance < closestDistance)
+            {
+                closestWorker = unit;
+                closestDistance = distance;
+            }
+        }
+    }
+
+    return closestWorker;
 }
 
 // Attempt tp construct a building of a given type 
@@ -65,14 +102,14 @@ bool Tools::BuildBuilding(BWAPI::UnitType type)
 
     // Get a unit that we own that is of the given type so it can build
     // If we can't find a valid builder unit, then we have to cancel the building
-    BWAPI::Unit builder = Tools::GetUnitOfType(builderType);
+    BWAPI::Unit builder = Tools::GetUnitOfType(builderType, true);
     if (!builder) { return false; }
 
     // Get a location that we want to build the building next to
     BWAPI::TilePosition desiredPos = BWAPI::Broodwar->self()->getStartLocation();
 
     // Ask BWAPI for a building location near the desired position for the type
-    int maxBuildRange = 64;
+    int maxBuildRange = 16;
     bool buildingOnCreep = type.requiresCreep();
     BWAPI::TilePosition buildPos = BWAPI::Broodwar->getBuildLocation(type, desiredPos, maxBuildRange, buildingOnCreep);
     return builder->build(type, buildPos);
