@@ -27,7 +27,7 @@ public:
 
 	BuildOrder();
 
-	const BuildOrderItem &	getBuildOrderItem() const;
+	const BuildOrderItem&	operator[] (const size_t& index) const;
 	void					setBuildOrder();
 	void					removeBuildOrderItem();
 	int						getSize();

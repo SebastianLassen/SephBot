@@ -1,4 +1,5 @@
 #include "Tools.h"
+#include "BuildingData.h"
 
 
 BWAPI::Unit Tools::GetClosestUnitTo(BWAPI::Position p, const BWAPI::Unitset& units)
@@ -46,14 +47,21 @@ BWAPI::Unit Tools::GetUnitOfType(BWAPI::UnitType type, bool isWorker)
         {
             // we need a worker, so far just take on that is gathering minerals
             // Really need a workerJob enum so that workers that are assigned important tasks are ignored
-            if (unit->getType() == type && unit->isCompleted() && unit->getDistance(Tools::GetDepot()) < 8)
+            if (unit->getType() == type && unit->isCompleted() && unit->getDistance(Tools::GetDepot()) < 16)
+            {
+                return unit;
+            }
+        }
+        else if (unit->getType().isBuilding() && unit->getType().canProduce())
+        {
+            // if the unit is of the correct type, and it actually has been constructed, return it
+            if (unit->getType() == type && unit->isCompleted() && !unit->isTraining())
             {
                 return unit;
             }
         }
         else
         {
-            // if the unit is of the correct type, and it actually has been constructed, return it
             if (unit->getType() == type && unit->isCompleted())
             {
                 return unit;

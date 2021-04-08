@@ -24,6 +24,7 @@ public:
 
 	// extended
 	void sendScout();
+	void sendUnitsToAttack();
 
     // functions that are triggered by various BWAPI events from main.cpp
 	void onStart();

@@ -3,17 +3,24 @@
 #include <BWAPI.h>
 #include <vector>
 
+
+namespace BuildingStatus
+{
+	enum { Unassigned = 0, Assigned = 1, UnderConstruction = 2, Size = 3 };
+}
+
 class Building
 {
 
 public:
 
-	BWAPI::TilePosition position		= BWAPI::TilePositions::None;
-	BWAPI::UnitType		type			= BWAPI::UnitTypes::None;
-	BWAPI::Unit			builderUnit		= nullptr;
-	BWAPI::Unit			self			= nullptr;
-	bool				assigned		= false;
-	bool				constructing	= false;
+	BWAPI::TilePosition position			= BWAPI::TilePositions::None;
+	BWAPI::UnitType		type				= BWAPI::UnitTypes::None;
+	BWAPI::Unit			builderUnit			= nullptr;
+	BWAPI::Unit			self				= nullptr;
+	size_t				status				= BuildingStatus::Unassigned;
+	bool				buildCommandGiven	= false;
+	bool				underConstruction	= false;
 
 	Building()
 	{

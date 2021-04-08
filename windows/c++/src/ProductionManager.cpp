@@ -25,9 +25,9 @@ void ProductionManager::onFrame()
 
 	removeFromBuildings();
 
-	if (p_buildOrder.getBuildOrderItem().supply <= BWAPI::Broodwar->self()->supplyUsed() / 2)
+	if (p_buildOrder.getSize() > 0)
 	{
-		if (p_buildOrder.getSize() > 0)
+		if (p_buildOrder[0].supply <= BWAPI::Broodwar->self()->supplyUsed() / 2)
 		{
 			findItemToProduce();
 		}
@@ -40,12 +40,19 @@ void ProductionManager::onFrame()
 		issueProduction();
 		checkForStartedProduction();
 	}
+
+	
+	if (p_buildOrder.isEmpty())
+	{
+		trainUnit(BWAPI::UnitTypes::Protoss_Zealot);
+	}
+
 }
 
 void ProductionManager::findItemToProduce()
 {
 	// Temporary variable to store the items type
-	BWAPI::UnitType type = p_buildOrder.getBuildOrderItem().type;
+	BWAPI::UnitType type = p_buildOrder[0].type;
 
 	// Update the amount we need to build said item
 	p_reservedMinerals += type.mineralPrice();
@@ -59,6 +66,8 @@ void ProductionManager::findItemToProduce()
 		// Creating new object for the item to be created
 		Building b(type, BWAPI::Broodwar->self()->getStartLocation());
 		p_buildings.push_back(b);
+
+		BWAPI::Broodwar << b.type.c_str() << std::endl;
 	}
 
 	// Remove the item from the build order vector
@@ -69,12 +78,14 @@ void ProductionManager::assignWorkerToItem()
 {
 	for (Building& b : p_buildings)
 	{
-		if (b.assigned) { continue; }
+		if (b.status != BuildingStatus::Unassigned) { continue; }
 
 		BWAPI::Unit builder = Tools::findBuilderUnit(b);
 
 		if (builder)
 		{
+
+			b.builderUnit = builder;
 			BWAPI::TilePosition desiredPos = b.position;
 			int maxBuildRange = 16;
 			bool buildingCreep = b.type.requiresCreep();
@@ -87,7 +98,7 @@ void ProductionManager::assignWorkerToItem()
 			}
 
 			b.position = buildPos;
-			b.assigned = true;
+			b.status = BuildingStatus::Assigned;
 
 		}
 	}
@@ -97,12 +108,13 @@ void ProductionManager::issueProduction()
 {
 	for (auto& b : p_buildings)
 	{
-		if (!b.assigned || b.constructing) { continue; }
+		if (b.status != BuildingStatus::Assigned) { continue; }
 
-		b.builderUnit->build(b.type, b.position);
-
-		//NULLPTR???!?!?!?
-
+		if (!b.builderUnit->isConstructing())
+		{
+			b.builderUnit->build(b.type, b.position);
+			b.buildCommandGiven = true;
+		}
 	}
 
 
@@ -132,18 +144,22 @@ void ProductionManager::checkForStartedProduction()
 
 		for (auto& b : p_buildings)
 		{
-			if (!b.assigned) { continue; }
+			if (b.status != BuildingStatus::Assigned) { continue; }
 
 			if (u->getTilePosition() == b.position)
 			{
 				p_reservedMinerals	-= b.type.mineralPrice();
 				p_reservedGas		-= b.type.gasPrice();
 
+
+				b.underConstruction = true;
 				b.self = u;
-				b.constructing = true;
+
 				b.builderUnit = nullptr;
 
+				b.status = BuildingStatus::UnderConstruction;
 				p_queue.removeFromQueue();
+
 				break;
 			}
 		}
@@ -161,21 +177,11 @@ void ProductionManager::trainUnit(BWAPI::UnitType type)
 
 	// Get a unit that we own that is of the given type so it can train
 	// If we can't find a valid trainer unit, then we have to cancel the training
-	BWAPI::Unit building = Tools::GetUnitOfType(type, false);
-	if (!building) { return; }
+	const BWAPI::Unit building = Tools::GetUnitOfType(type.whatBuilds().first, false);
 
 	// if we have a valid building unit and it's currently not training something, train a unit
 	// there is no reason for a bot to ever use the unit queueing system, it just wastes resources
-	if (!building->isTraining()) 
-	{ 
-		const bool startedProduction = building->train(type); 
-		if (startedProduction)
-		{
-			BWAPI::Broodwar->printf("Started Production %s", type.getName().c_str());
-		}
-	}
-
-
+	if (building && !building->isTraining()) { building->train(type); }
 }
 
 void ProductionManager::addToBuildings(BWAPI::Unit unit)
@@ -194,7 +200,7 @@ void ProductionManager::removeFromBuildings()
 
 	for (auto& b : p_buildings)
 	{
-		if (!b.constructing)
+		if (b.status != BuildingStatus::UnderConstruction)
 		{
 			continue;
 		}

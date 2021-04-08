@@ -53,6 +53,9 @@ void SephBot::onFrame()
     // Draw unit health bars, which brood war unfortunately does not do
     //Tools::DrawUnitHealthBars();
 
+    // Send combat units to attack
+    sendUnitsToAttack();
+
     // Draw some relevent information to the screen to help us debug the bot
     drawDebugInformation();
 }
@@ -135,10 +138,12 @@ void SephBot::sendScout()
         return;
     }
 
+
     if (!p_scout)
     {
         p_scout = Tools::GetUnitOfType(BWAPI::Broodwar->self()->getRace().getWorker(), true);
     }
+
 
     auto & getStartLocations = BWAPI::Broodwar->getStartLocations();
 
@@ -157,26 +162,37 @@ void SephBot::sendScout()
                 }
             }
         }
-        else if (!BWAPI::Broodwar->isExplored(tp))
+        else
         {
-            BWAPI::Position pos(tp);
+            if (p_scout)
+            {
+                BWAPI::Position pos(tp);
 
-            p_scout->move(pos);
-            break;
+                p_scout->move(pos);
+                break;
+            }
         }
     }
 }
 
-/*        if( Broodwar->isVisible( workerScouts[i].TileTarget ) ){
-            bool depot = false;
-            //Broodwar->enemy()->getUnits()
-            BOOST_FOREACH(BWAPI::Unit  enemy,  Broodwar->enemy()->getUnits() ) {
-                if( enemy->getType().isResourceDepot() && enemy->getTilePosition() ==  workerScouts[i].TileTarget ){
-                    depot = true;
-                }
-            }
-*/
+void SephBot::sendUnitsToAttack()
+{
+    if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->getUnits()) < 1)
+    {
+        return;
+    }
 
+    BWAPI::Position pos(p_mapTools.getEnemyStartLocation());
+    const BWAPI::Unitset& myUnits = BWAPI::Broodwar->self()->getUnits();
+
+    for (auto& unit : myUnits)
+    {
+        if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot && unit->isIdle())
+        {
+            unit->attack(pos);
+        }
+    }
+}
 
 // Called whenever a unit is destroyed, with a pointer to the unit
 void SephBot::onUnitDestroy(BWAPI::Unit unit)

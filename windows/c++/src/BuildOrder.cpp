@@ -5,11 +5,6 @@ BuildOrder::BuildOrder()
 
 }
 
-const BuildOrderItem & BuildOrder::getBuildOrderItem() const
-{
-	return p_buildOrderItems[0];
-}
-
 void BuildOrder::setBuildOrder()
 {
 	BuildOrderItem newItem;
@@ -78,4 +73,9 @@ int BuildOrder::getSize()
 bool BuildOrder::isEmpty()
 {
 	return p_buildOrderItems.empty();
+}
+
+const BuildOrderItem& BuildOrder::operator[] (const size_t & index) const
+{
+	return p_buildOrderItems[index];
 }
