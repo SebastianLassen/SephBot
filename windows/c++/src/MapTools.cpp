@@ -283,9 +283,18 @@ void MapTools::draw() const
    
 }
 
-void MapTools::setEnemyStartLocation(BWAPI::TilePosition)
+void MapTools::setEnemyStartLocation(BWAPI::TilePosition pos)
 {
+    enemyBaseLocation = pos;
+}
 
+bool MapTools::isEnemyBaseFound(bool found)
+{
+    if (found)
+    {
+        enemyBaseFound = true;
+    }
+    return enemyBaseFound;
 }
 
 BWAPI::TilePosition MapTools::getEnemyStartLocation()

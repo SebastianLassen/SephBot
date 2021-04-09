@@ -133,21 +133,49 @@ void SephBot::drawDebugInformation()
 
 void SephBot::sendScout()
 {
-    if (p_mapTools.getEnemyStartLocation() != BWAPI::TilePositions::Unknown)
+    if (p_mapTools.isEnemyBaseFound())
     {
         return;
     }
-
 
     if (!p_scout)
     {
         p_scout = Tools::GetUnitOfType(BWAPI::Broodwar->self()->getRace().getWorker(), true);
     }
 
+    BWAPI::TilePosition tempPos = p_mapTools.getEnemyStartLocation();
 
-    auto & getStartLocations = BWAPI::Broodwar->getStartLocations();
+    if (tempPos != BWAPI::TilePositions::Unknown)
+    {
+        if (BWAPI::Broodwar->isVisible(tempPos) || BWAPI::Broodwar->isExplored(tempPos))
+        {
+            for (auto& unit : BWAPI::Broodwar->enemy()->getUnits())
+            {
+                if (unit->getType().isResourceDepot() && unit->getTilePosition() == tempPos)
+                {
+                    p_mapTools.isEnemyBaseFound(true);
+                    p_mapTools.setEnemyStartLocation(tempPos);
+                    p_scout->move(BWAPI::Position(p_mapTools.getSelfStartLocation()));
+                    return;
+                }
+            }
+        }
+    }
 
-    for (BWAPI::TilePosition tp : getStartLocations)
+    for (auto startLocation : BWAPI::Broodwar->getStartLocations())
+    {
+        if (!BWAPI::Broodwar->isExplored(startLocation) && p_scout)
+        {
+            p_mapTools.setEnemyStartLocation(startLocation);
+            p_scout->move(BWAPI::Position(startLocation));
+            BWAPI::Broodwar->drawCircleMap(BWAPI::Position(startLocation), 32, BWAPI::Colors::Purple);
+            break;
+        }
+    }
+
+
+    /*
+    for (BWAPI::TilePosition tp : startLocations)
     {
         if (BWAPI::Broodwar->isExplored(tp)) 
         { 
@@ -173,11 +201,17 @@ void SephBot::sendScout()
             }
         }
     }
+    */
 }
 
 void SephBot::sendUnitsToAttack()
 {
-    if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->getUnits()) < 1)
+    if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->getUnits()) < 3)
+    {
+        return;
+    }
+
+    if (!p_mapTools.isEnemyBaseFound())
     {
         return;
     }
@@ -259,3 +293,23 @@ void SephBot::onUnitRenegade(BWAPI::Unit unit)
 { 
 	
 }
+
+
+
+
+/*              EXAMPLE OF A COUNTDOWN TIMER USING REGISTER EVENT
+void ExampleAIModule::onStart()
+{
+// Register a callback that only occurs once when the countdown timer reaches 0
+if ( BWAPI::Broodwar->getGameType() == BWAPI::GameTypes::Capture_The_Flag ||
+BWAPI::Broodwar->getGameType() == BWAPI::GameTypes::Team_Capture_The_Flag )
+ {
+BWAPI::Broodwar->registerEvent([](BWAPI::Game*){ BWAPI::Broodwar->sendText("Try to find my flag!"); }, // action
+ [](BWAPI::Game*){ returnBWAPI::Broodwar->countdownTimer() == 0; }, // condition
+ 1); // times to run (once)
+ }
+}
+
+
+
+*/
