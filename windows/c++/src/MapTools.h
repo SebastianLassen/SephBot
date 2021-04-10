@@ -7,6 +7,8 @@
 
 class MapTools
 {
+    friend class Global;
+    
     Grid<int>   m_walkable;       // whether a tile is buildable (includes static resources)          
     Grid<int>   m_buildable;      // whether a tile is buildable (includes static resources)
     Grid<int>   m_depotBuildable; // whether a depot is buildable on a tile (illegal within 3 tiles of static resource)

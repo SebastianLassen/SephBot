@@ -1,14 +1,9 @@
 #pragma once
 
-#include "MapTools.h"
-#include "ProductionManager.h"
-
 #include <BWAPI.h>
 
 class SephBot
 {
-    MapTools			p_mapTools;
-	ProductionManager	p_productionManager;
 
 	BWAPI::Unit p_scout = nullptr;
 

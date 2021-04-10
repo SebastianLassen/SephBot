@@ -11,7 +11,10 @@
 
 class ProductionManager
 {
+	friend class Global;
+
 	BuildOrder			p_buildOrder;
+	BuildOrder			p_buildOrderMidGame;
 	BuildOrderQueue		p_queue;
 
 	int		p_reservedMinerals = 0;
@@ -25,7 +28,7 @@ public:
 
 	void		onStart();
 	void		onFrame();	
-	void		findItemToProduce();
+	void		findItemToProduce(BuildOrder & buildOrder);
 	void		assignWorkerToItem();
 	void		issueProduction();
 	void		checkForStartedProduction();

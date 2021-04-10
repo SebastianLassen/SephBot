@@ -1,5 +1,6 @@
 #include "ProductionManager.h"
 #include "Tools.h"
+#include "Global.h"
 
 ProductionManager::ProductionManager()
 {
@@ -9,6 +10,7 @@ ProductionManager::ProductionManager()
 void ProductionManager::onStart()
 {
 	p_buildOrder.setBuildOrder();
+	p_buildOrderMidGame.setMidGameBuildOrder();
 }
 
 void ProductionManager::onFrame()
@@ -29,7 +31,7 @@ void ProductionManager::onFrame()
 	{
 		if (p_buildOrder[0].supply <= BWAPI::Broodwar->self()->supplyUsed() / 2)
 		{
-			findItemToProduce();
+			findItemToProduce(p_buildOrder);
 		}
 	}
 
@@ -45,14 +47,21 @@ void ProductionManager::onFrame()
 	if (p_buildOrder.isEmpty())
 	{
 		trainUnit(BWAPI::UnitTypes::Protoss_Zealot);
-	}
 
+		if (p_buildOrderMidGame.getSize() > 0)
+		{
+			if (p_buildOrderMidGame[0].supply <= BWAPI::Broodwar->self()->supplyUsed() / 2)
+			{
+				findItemToProduce(p_buildOrderMidGame);
+			}
+		}
+	}
 }
 
-void ProductionManager::findItemToProduce()
+void ProductionManager::findItemToProduce(BuildOrder & buildOrder)
 {
 	// Temporary variable to store the items type
-	BWAPI::UnitType type = p_buildOrder[0].type;
+	BWAPI::UnitType type = buildOrder[0].type;
 
 	// Update the amount we need to build said item
 	p_reservedMinerals += type.mineralPrice();
@@ -71,7 +80,7 @@ void ProductionManager::findItemToProduce()
 	}
 
 	// Remove the item from the build order vector
-	p_buildOrder.removeBuildOrderItem();
+	buildOrder.removeBuildOrderItem();
 }
 
 void ProductionManager::assignWorkerToItem()

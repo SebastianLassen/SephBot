@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\BaseManager.h" />
     <ClInclude Include="..\src\BuildingData.h" />
     <ClInclude Include="..\src\BuildOrder.h" />
     <ClInclude Include="..\src\BuildOrderQueue.h" />
@@ -18,9 +19,11 @@
     <ClInclude Include="..\src\MapTools.h" />
     <ClInclude Include="..\src\ProductionManager.h" />
     <ClInclude Include="..\src\SephBot.h" />
+    <ClInclude Include="..\src\Global.h" />
     <ClInclude Include="..\src\Tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\BaseManager.cpp" />
     <ClCompile Include="..\src\BuildingData.cpp" />
     <ClCompile Include="..\src\BuildOrder.cpp" />
     <ClCompile Include="..\src\BuildOrderQueue.cpp" />
@@ -28,6 +31,7 @@
     <ClCompile Include="..\src\MapTools.cpp" />
     <ClCompile Include="..\src\ProductionManager.cpp" />
     <ClCompile Include="..\src\SephBot.cpp" />
+    <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

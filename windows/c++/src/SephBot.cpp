@@ -2,10 +2,12 @@
 #include "Tools.h"
 #include "MapTools.h"
 #include "BuildingData.h"
+#include "Global.h"
+#include "ProductionManager.h"
 
 SephBot::SephBot()
 {
-    
+    Global::GameStart();
 }
 
 // Called when the bot starts!
@@ -19,8 +21,8 @@ void SephBot::onStart()
     BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 
     // Call MapTools OnStart
-    p_mapTools.onStart();
-    p_productionManager.onStart();
+    Global::Map().onStart();
+    Global::Production().onStart();
 }
 
 // Called whenever the game ends and tells you if you won or not
@@ -33,7 +35,7 @@ void SephBot::onEnd(bool isWinner)
 void SephBot::onFrame()
 {
     // Update our MapTools information
-    p_mapTools.onFrame();
+    Global::Map().onFrame();
 
     // Send our idle workers to mine minerals so they don't just stand there
     sendIdleWorkersToMinerals();
@@ -42,7 +44,7 @@ void SephBot::onFrame()
     if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 7) { sendScout(); }
 
     // Follow the build order
-    p_productionManager.onFrame();
+    Global::Production().onFrame();
 
     // Train more workers so we can gather more income
     trainAdditionalWorkers();
@@ -86,7 +88,7 @@ void SephBot::sendIdleWorkersToMinerals()
 // Train more workers so we can gather more income
 void SephBot::trainAdditionalWorkers()
 {
-    const int mineralsAvailable = BWAPI::Broodwar->self()->minerals() - p_productionManager.getReservedMinerals();
+    const int mineralsAvailable = BWAPI::Broodwar->self()->minerals() - Global::Production().getReservedMinerals();
     
     const BWAPI::UnitType workerType = BWAPI::Broodwar->self()->getRace().getWorker();
     if (mineralsAvailable < workerType.mineralPrice()) { return; }
@@ -133,7 +135,7 @@ void SephBot::drawDebugInformation()
 
 void SephBot::sendScout()
 {
-    if (p_mapTools.isEnemyBaseFound())
+    if (Global::Map().isEnemyBaseFound())
     {
         return;
     }
@@ -143,7 +145,7 @@ void SephBot::sendScout()
         p_scout = Tools::GetUnitOfType(BWAPI::Broodwar->self()->getRace().getWorker(), true);
     }
 
-    BWAPI::TilePosition tempPos = p_mapTools.getEnemyStartLocation();
+    BWAPI::TilePosition tempPos = Global::Map().getEnemyStartLocation();
 
     if (tempPos != BWAPI::TilePositions::Unknown)
     {
@@ -153,9 +155,9 @@ void SephBot::sendScout()
             {
                 if (unit->getType().isResourceDepot() && unit->getTilePosition() == tempPos)
                 {
-                    p_mapTools.isEnemyBaseFound(true);
-                    p_mapTools.setEnemyStartLocation(tempPos);
-                    p_scout->move(BWAPI::Position(p_mapTools.getSelfStartLocation()));
+                    Global::Map().isEnemyBaseFound(true);
+                    Global::Map().setEnemyStartLocation(tempPos);
+                    p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
                     return;
                 }
             }
@@ -166,7 +168,7 @@ void SephBot::sendScout()
     {
         if (!BWAPI::Broodwar->isExplored(startLocation) && p_scout)
         {
-            p_mapTools.setEnemyStartLocation(startLocation);
+            Global::Map().setEnemyStartLocation(startLocation);
             p_scout->move(BWAPI::Position(startLocation));
             BWAPI::Broodwar->drawCircleMap(BWAPI::Position(startLocation), 32, BWAPI::Colors::Purple);
             break;
@@ -211,12 +213,12 @@ void SephBot::sendUnitsToAttack()
         return;
     }
 
-    if (!p_mapTools.isEnemyBaseFound())
+    if (!Global::Map().isEnemyBaseFound())
     {
         return;
     }
 
-    BWAPI::Position pos(p_mapTools.getEnemyStartLocation());
+    BWAPI::Position pos(Global::Map().getEnemyStartLocation());
     const BWAPI::Unitset& myUnits = BWAPI::Broodwar->self()->getUnits();
 
     for (auto& unit : myUnits)
@@ -255,7 +257,7 @@ void SephBot::onSendText(std::string text)
 { 
     if (text == "/map")
     {
-        p_mapTools.toggleDraw();
+        Global::Map().toggleDraw();
     }
 }
 

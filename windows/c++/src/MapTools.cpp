@@ -1,4 +1,5 @@
 #include "MapTools.h"
+#include "Global.h"
 
 #include <iostream>
 #include <sstream>
