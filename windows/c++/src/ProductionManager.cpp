@@ -107,6 +107,10 @@ void ProductionManager::assignWorkerToItem()
 			}
 
 			b.position = buildPos;
+
+			// Need to have a grid or some other structure that keeps track of positions
+			p_buildingPlacer.getBuildingLocation(b);
+
 			b.status = BuildingStatus::Assigned;
 
 		}

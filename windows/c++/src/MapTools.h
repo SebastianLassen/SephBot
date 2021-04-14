@@ -2,8 +2,7 @@
 
 #include "Grid.hpp"
 
-#include <BWAPI.h>
-#include <vector>
+#include "Common.h"
 
 class MapTools
 {
@@ -58,4 +57,6 @@ public:
     bool                  isEnemyBaseFound(bool found = false);
     BWAPI::TilePosition   getEnemyStartLocation();
     BWAPI::TilePosition   getSelfStartLocation();
+
+    void                  testAssertFunction();
 };

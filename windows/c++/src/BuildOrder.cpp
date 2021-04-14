@@ -63,6 +63,10 @@ void BuildOrder::setBuildOrder()
 void BuildOrder::setMidGameBuildOrder()
 {
 	BuildOrderItem newItem;
+
+	newItem.supply = 15;
+	newItem.type = BWAPI::UnitTypes::Protoss_Assimilator;
+	p_buildOrderItems.push_back(newItem);
 	
 	newItem.supply = 22;
 	newItem.type = BWAPI::UnitTypes::Protoss_Gateway;

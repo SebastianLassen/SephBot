@@ -1,7 +1,6 @@
 #pragma once
 
-#include <BWAPI.h>
-#include <vector>
+#include "Common.h"
 
 struct BuildOrderItem
 {
@@ -27,11 +26,11 @@ public:
 
 	BuildOrder();
 
-	const BuildOrderItem&	operator[] (const size_t& index) const;
 	void					setBuildOrder();
 	void					setMidGameBuildOrder();
 	void					removeBuildOrderItem();
 	int						getSize();
 	bool					isEmpty();
+	const					BuildOrderItem& operator[] (const size_t& index) const;
 
 };

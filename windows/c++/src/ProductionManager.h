@@ -1,13 +1,11 @@
 #pragma once
 
-#include <BWAPI.h>
-#include <vector>
-#include <deque>
-#include <algorithm>
+#include "Common.h"
 
 #include "BuildOrder.h"
 #include "BuildOrderQueue.h"
 #include "BuildingData.h"
+#include "BuildingPlacer.h"
 
 class ProductionManager
 {
@@ -16,6 +14,7 @@ class ProductionManager
 	BuildOrder			p_buildOrder;
 	BuildOrder			p_buildOrderMidGame;
 	BuildOrderQueue		p_queue;
+	BuildingPlacer		p_buildingPlacer;
 
 	int		p_reservedMinerals = 0;
 	int		p_reservedGas = 0;

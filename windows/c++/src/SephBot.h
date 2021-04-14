@@ -1,6 +1,6 @@
 #pragma once
 
-#include <BWAPI.h>
+#include "Common.h"
 
 class SephBot
 {

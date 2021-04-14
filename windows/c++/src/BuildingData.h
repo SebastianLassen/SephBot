@@ -1,7 +1,6 @@
 #pragma once
 
-#include <BWAPI.h>
-#include <vector>
+#include "Common.h"
 
 
 namespace BuildingStatus

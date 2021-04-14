@@ -310,3 +310,9 @@ BWAPI::TilePosition MapTools::getSelfStartLocation()
 {
     return selfBaseLocation;
 }
+
+void MapTools::testAssertFunction()
+{
+    assert(1 == 2);
+
+}

@@ -17,6 +17,7 @@ Global & Global::Instance()
 void Global::init()
 {
 	reset(p_mapTools);
+	reset(p_productionManager);
 }
 
 void Global::GameStart()

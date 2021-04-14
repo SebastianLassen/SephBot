@@ -1,8 +1,6 @@
 #pragma once
 
-#include <BWAPI.h>
-#include <vector>
-#include <deque>
+#include "Common.h"
 
 class BuildOrderQueue
 {
