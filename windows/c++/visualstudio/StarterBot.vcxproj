@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\BaseManager.h" />
     <ClInclude Include="..\src\BuildingData.h" />
+    <ClInclude Include="..\src\BuildingPlacer.h" />
     <ClInclude Include="..\src\BuildOrder.h" />
     <ClInclude Include="..\src\BuildOrderQueue.h" />
     <ClInclude Include="..\src\Grid.hpp" />
@@ -25,6 +26,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\BaseManager.cpp" />
     <ClCompile Include="..\src\BuildingData.cpp" />
+    <ClCompile Include="..\src\BuildingPlacer.cpp" />
     <ClCompile Include="..\src\BuildOrder.cpp" />
     <ClCompile Include="..\src\BuildOrderQueue.cpp" />
     <ClCompile Include="..\src\main.cpp" />

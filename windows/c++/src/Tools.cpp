@@ -1,6 +1,26 @@
 #include "Tools.h"
 #include "BuildingData.h"
 
+/*
+BWAPI::Unit Tools::getClosestMineral(BWAPI::Unit myUnit)
+{
+    BWAPI::Unit closestMineral = nullptr;
+    int minDist = std::numeric_limits<int>::max();
+    for (auto& unit : BWAPI::Broodwar->getNeutralUnits())
+    {
+        // test to see if mineral
+        int dist = unit->getDistance(myUnit);
+        if (dist < minDist)
+        {
+            minDist = dist;
+            closestMineral = unit;
+        }
+    }
+    return closestMineral;
+}
+
+
+*/
 
 BWAPI::Unit Tools::GetClosestUnitTo(BWAPI::Position p, const BWAPI::Unitset& units)
 {
@@ -63,7 +83,7 @@ BWAPI::Unit Tools::GetUnitOfType(BWAPI::UnitType type, bool isWorker)
         else
         {
             if (unit->getType() == type && unit->isCompleted())
-            {
+            {   
                 return unit;
             }
         }
@@ -100,6 +120,22 @@ BWAPI::Unit Tools::findBuilderUnit(const Building& b)
     }
 
     return closestWorker;
+}
+
+int Tools::getBuildingLocationDistance(const Building& b)
+{
+    int numPylons = CountUnitsOfType(BWAPI::UnitTypes::Protoss_Pylon, BWAPI::Broodwar->self()->getUnits());
+    const int buildingSpacing = 1;
+    const int pylonSpacing = 3;
+
+    int distance = b.type == BWAPI::UnitTypes::Protoss_Photon_Cannon ? 0 : buildingSpacing;
+
+    if (b.type == BWAPI::UnitTypes::Protoss_Pylon && numPylons < 3)
+    {
+        distance = pylonSpacing;
+    }
+
+    return distance;
 }
 
 // Attempt tp construct a building of a given type 

@@ -13,6 +13,8 @@ namespace Tools
     BWAPI::Unit GetUnitOfType(BWAPI::UnitType type, bool isWorker);
     BWAPI::Unit GetDepot();
     BWAPI::Unit findBuilderUnit(const Building & b);
+    
+    int getBuildingLocationDistance(const Building & b);
 
     bool BuildBuilding(BWAPI::UnitType type);
 

@@ -1,17 +1,27 @@
 #include "BaseManager.h"
 #include "MapTools.h"
 
-BaseManager::BaseManager()
+BaseManager::BaseManager(int baseID, const std::vector<BWAPI::Unit> & resources)
+	: p_baseID(baseID)
 {
+    p_isPlayerStartLocation[BWAPI::Broodwar->self()] = false;
+    p_isPlayerStartLocation[BWAPI::Broodwar->enemy()] = false;
+    p_isPlayerOccupying[BWAPI::Broodwar->self()] = false;
+    p_isPlayerOccupying[BWAPI::Broodwar->enemy()] = false;
 
-}
+    for (auto& resource : resources)
+    {
+        if (resource->getType().isMineralField())
+        {
+            p_minerals.push_back(resource);
+            p_mineralsPos.push_back(resource->getPosition());
+        }
+        else
+        {
+            p_geysers.push_back(resource);
+            p_geysersPos.push_back(resource->getPosition());
+        }
+    }
 
-void BaseManager::onStart()
-{
-
-}
-
-void BaseManager::update()
-{
 
 }

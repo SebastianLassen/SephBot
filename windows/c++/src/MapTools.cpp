@@ -77,10 +77,13 @@ void MapTools::onFrame()
         {
             if (isVisible(x, y))
             {
+                // Should be (x, y, m_frame);
                 m_lastSeen.set(x, y, BWAPI::Broodwar->getFrameCount());
             }
         }
     }
+
+    //m_frame++;
 
     if (m_drawMap)
     {
