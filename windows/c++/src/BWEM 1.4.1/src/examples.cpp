@@ -54,7 +54,7 @@ void drawMap(const Map & theMap)
 		{
 			auto col = tile.GroundHeight() == 1 ? MapDrawer::Color::highGround : MapDrawer::Color::veryHighGround;
 			bw->drawBoxMap(Position(t), Position(t)+6, col, bool("isSolid"));
-			if (tile.Doodad()) bw->drawTriangleMap(center(t)+Position(0, 5), center(t)+Position(-3, 2), center(t)+Position(+3, 2), Colors::White);
+			if (tile.Doodad()) bw->drawTriangleMap(center(t)+Position(0, 5), center(t)+Position(-3, 2), center(t)+Position(+3, 2), BWAPI::Colors::White);
 		}
 	}
 

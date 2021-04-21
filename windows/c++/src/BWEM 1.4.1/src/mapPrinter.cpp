@@ -36,7 +36,7 @@ namespace utils {
 //                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-const string MapPrinter::m_fileName = "bwapi-data/map.bmp";
+const string MapPrinter::m_fileName = "../starcraft/bwapi-data/map.bmp";
 
 std::unique_ptr<BMP> MapPrinter::m_pBMP;
 MapPrinter MapPrinter::m_Instance;
