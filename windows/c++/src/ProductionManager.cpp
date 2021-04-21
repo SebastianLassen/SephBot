@@ -11,6 +11,12 @@ void ProductionManager::onStart()
 {
 	p_buildOrder.setBuildOrder();
 	p_buildOrderMidGame.setMidGameBuildOrder();
+
+	BWAPI::Unit depot = Tools::GetDepot();
+	Building b(depot->getType(), depot->getTilePosition());
+	b.self = depot;
+
+	p_buildingPlacer.addBuildingPosition(b);
 }
 
 void ProductionManager::onFrame()
@@ -100,6 +106,10 @@ void ProductionManager::assignWorkerToItem()
 			bool buildingCreep = b.type.requiresCreep();
 
 			BWAPI::TilePosition buildPos = BWAPI::Broodwar->getBuildLocation(b.type, desiredPos, maxBuildRange, buildingCreep);
+			
+			// TODO LATER ON
+			// ---------------------------------
+			//p_buildingPlacer.getBuildingLocation(b);
 
 			if (!buildPos.isValid())
 			{
@@ -108,14 +118,12 @@ void ProductionManager::assignWorkerToItem()
 
 			b.position = buildPos;
 
-			// Need to have a grid or some other structure that keeps track of positions
-			p_buildingPlacer.getBuildingLocation(b);
-
 			b.status = BuildingStatus::Assigned;
 
 		}
 	}
 }
+
 
 void ProductionManager::issueProduction()
 {
@@ -171,6 +179,9 @@ void ProductionManager::checkForStartedProduction()
 				b.builderUnit = nullptr;
 
 				b.status = BuildingStatus::UnderConstruction;
+
+				//p_buildingPlacer.addBuildingPosition(b);
+
 				p_queue.removeFromQueue();
 
 				break;

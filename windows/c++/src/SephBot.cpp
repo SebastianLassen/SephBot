@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "ProductionManager.h"
 
+
 SephBot::SephBot()
 {
     Global::GameStart();
@@ -23,6 +24,7 @@ void SephBot::onStart()
     // Call MapTools OnStart
     Global::Map().onStart();
     Global::Production().onStart();
+
 }
 
 // Called whenever the game ends and tells you if you won or not
@@ -60,6 +62,7 @@ void SephBot::onFrame()
 
     // Draw some relevent information to the screen to help us debug the bot
     drawDebugInformation();
+
 }
 
 // Send our idle workers to mine minerals so they don't just stand there
@@ -295,7 +298,6 @@ void SephBot::onUnitRenegade(BWAPI::Unit unit)
 { 
 	
 }
-
 
 
 

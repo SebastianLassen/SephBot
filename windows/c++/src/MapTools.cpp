@@ -316,3 +316,38 @@ void MapTools::testAssertFunction()
     assert(1 == 2);
 
 }
+
+void MapTools::drawTestTiles()
+{
+    BWAPI::TilePosition depotPos;
+
+    for (auto& u : BWAPI::Broodwar->self()->getUnits())
+    {
+        if (u->getType().isResourceDepot())
+        {
+            depotPos = u->getTilePosition();
+            break;
+        }
+    }
+
+    const int sx = depotPos.x + 2;
+    const int sy = depotPos.y + 2;
+    
+    const int ex = depotPos.x + 10;
+    const int ey = depotPos.y + 5;
+
+    for (int x = sx; x < ex; ++x)
+    {
+        for (int y = sy; y < ey; y++)
+        {
+            const BWAPI::TilePosition tilePos(x, y);
+            if (!tilePos.isValid()) { continue; }
+
+            if (true)
+            {
+                drawTile(x, y, BWAPI::Colors::Blue);
+            }
+        }
+    }
+
+}

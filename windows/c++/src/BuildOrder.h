@@ -4,6 +4,7 @@
 
 struct BuildOrderItem
 {
+
 	int supply				= 0;
 	BWAPI::UnitType type	= BWAPI::UnitTypes::Unknown;
 

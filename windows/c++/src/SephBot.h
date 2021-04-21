@@ -2,6 +2,9 @@
 
 #include "Common.h"
 
+#include <windows.h>
+
+
 class SephBot
 {
 
@@ -33,4 +36,5 @@ public:
 	void onUnitShow(BWAPI::Unit unit);
 	void onUnitHide(BWAPI::Unit unit);
 	void onUnitRenegade(BWAPI::Unit unit);
+
 };

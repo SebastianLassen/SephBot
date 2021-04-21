@@ -59,4 +59,5 @@ public:
     BWAPI::TilePosition   getSelfStartLocation();
 
     void                  testAssertFunction();
+    void                  drawTestTiles();
 };

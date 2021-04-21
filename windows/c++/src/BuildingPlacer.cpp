@@ -9,6 +9,39 @@ BuildingPlacer::BuildingPlacer()
 }
 
 
+void BuildingPlacer::addBuildingPosition(const Building& b)
+{
+	p_buildingPositions.push_back(b);
+}
+
+void BuildingPlacer::removeBuildingPosition(BWAPI::TilePosition pos)
+{
+	for (auto& pos : p_buildingPositions)
+	{
+		auto& it = std::find(p_buildingPositions.begin(), p_buildingPositions.end(), pos);
+
+		if (it != p_buildingPositions.end())
+		{
+			p_buildingPositions.erase(it);
+		}
+	}
+}
+
+
+std::vector<BWAPI::TilePosition>& BuildingPlacer::getBuildingPositions()
+{
+	std::vector<BWAPI::TilePosition> buildingPositions;
+	for (auto& b : p_buildingPositions)
+	{
+		if (!(b.self == nullptr || !b.self->getType().isBuilding() || b.self->getHitPoints() <= 0))
+		{
+			buildingPositions.push_back(b.position);
+		}
+	}
+	return buildingPositions;
+}
+
+
 bool BuildingPlacer::canBuildHereWithSpace(BWAPI::TilePosition pos, const Building& b, int buildDist)
 {
 	BWAPI::UnitType type = b.type;
@@ -20,6 +53,7 @@ bool BuildingPlacer::canBuildHereWithSpace(BWAPI::TilePosition pos, const Buildi
 	int starty = pos.y - buildDist;
 	int endx = pos.x + width + buildDist;
 	int endy = pos.y + height + buildDist;
+
 
 	if (startx < 0 || starty < 0 || endx > BWAPI::Broodwar->mapWidth() || endx < pos.x + width || endy > BWAPI::Broodwar->mapHeight())
 	{
@@ -105,11 +139,25 @@ BWAPI::TilePosition BuildingPlacer::getBuildingLocationNear(const Building& b, i
 	what has been placed or something.
 	
 	*/
-	if (canBuildHereWithSpace(b.position, b, buildDist))
+
+	std::vector<BWAPI::TilePosition>& buildingPositions = getBuildingPositions();
+
+	if (p_buildingPositions.empty())
 	{
-		return b.position;
+		if (canBuildHereWithSpace(b.position, b, buildDist))
+		{
+			return b.position;
+		}
 	}
 
+	for (size_t i(0); i < buildingPositions.size(); i++)
+	{
+		if (canBuildHereWithSpace(buildingPositions[i], b, buildDist))
+		{
+			// NEED TO OFFSET AS THE TILEPOSITIONS ARE THE EXACT POSITIONS OF BUILDINGS
+			return buildingPositions[i];
+		}
+	}
 
 	return BWAPI::TilePositions::None;
 }

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\BaseManager.cpp" />
+    <ClCompile Include="..\src\BuildingData.cpp" />
+    <ClCompile Include="..\src\BuildingPlacer.cpp" />
+    <ClCompile Include="..\src\BuildOrder.cpp" />
+    <ClCompile Include="..\src\BuildOrderQueue.cpp" />
+    <ClCompile Include="..\src\Common.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\MapTools.cpp" />
+    <ClCompile Include="..\src\ProductionManager.cpp" />
+    <ClCompile Include="..\src\SephBot.cpp" />
+    <ClCompile Include="..\src\Global.cpp" />
+    <ClCompile Include="..\src\Tools.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\BaseManager.h" />
+    <ClInclude Include="..\src\BuildingData.h" />
+    <ClInclude Include="..\src\BuildingPlacer.h" />
+    <ClInclude Include="..\src\BuildOrder.h" />
+    <ClInclude Include="..\src\BuildOrderQueue.h" />
+    <ClInclude Include="..\src\Common.h" />
+    <ClInclude Include="..\src\Grid.hpp" />
+    <ClInclude Include="..\src\MapTools.h" />
+    <ClInclude Include="..\src\ProductionManager.h" />
+    <ClInclude Include="..\src\SephBot.h" />
+    <ClInclude Include="..\src\Global.h" />
+    <ClInclude Include="..\src\Tools.h" />
+    <ClInclude Include="..\src\BWEM\src\map.h" />
+  </ItemGroup>
+</Project>
