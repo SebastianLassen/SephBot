@@ -3,6 +3,7 @@
 #include "Grid.hpp"
 
 #include "Common.h"
+#include "Map.h"
 
 class MapTools
 {
@@ -25,6 +26,8 @@ class MapTools
     bool canWalk(int tileX, int tileY) const;
     void printMap() const;
 
+
+    Map p_allMap;
 
 public:
 

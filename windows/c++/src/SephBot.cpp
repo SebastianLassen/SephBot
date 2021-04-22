@@ -8,9 +8,6 @@
 #include "BWEM 1.4.1/src/bwem.h"
 #include <iostream>
 
-namespace { auto& theMap = BWEM::Map::Instance(); }
-
-
 SephBot::SephBot()
 {
     Global::GameStart();
@@ -29,15 +26,6 @@ void SephBot::onStart()
     // Call MapTools OnStart
     Global::Map().onStart();
     Global::Production().onStart();
-
-    theMap.Initialize();
-    theMap.EnableAutomaticPathAnalysis();
-    bool startingLocationsOK = theMap.FindBasesForStartingLocations();
-    assert(startingLocationsOK);
-
-    BWEM::utils::MapPrinter::Initialize(&theMap);
-    BWEM::utils::printMap(theMap);      // will print the map into the file <StarCraftFolder>bwapi-data/map.bmp
-    BWEM::utils::pathExample(theMap);   // add to the printed map a path between two starting locations
 
 }
 
@@ -265,8 +253,6 @@ void SephBot::onUnitDestroy(BWAPI::Unit unit)
         }
     }
     */
-    if (unit->getType().isMineralField())   theMap.OnMineralDestroyed(unit);
-    else if (unit->getType().isSpecialBuilding()) theMap.OnStaticBuildingDestroyed(unit);
 }
 
 // Called whenever a unit is morphed, with a pointer to the unit
@@ -282,10 +268,6 @@ void SephBot::onSendText(std::string text)
     if (text == "/map")
     {
         Global::Map().toggleDraw();
-    }
-    else
-    {
-        BWEM::utils::MapDrawer::ProcessCommand(text);
     }
 }
 

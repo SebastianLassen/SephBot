@@ -15,6 +15,7 @@
 #include <set>
 #include <map>
 #include <array>
+#include <iostream>
 
 #include <BWAPI.h>
 

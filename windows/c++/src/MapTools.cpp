@@ -67,6 +67,8 @@ void MapTools::onStart()
             }
         }
     }
+
+    p_allMap.Initialize();
 }
 
 void MapTools::onFrame()
@@ -303,12 +305,12 @@ bool MapTools::isEnemyBaseFound(bool found)
 
 BWAPI::TilePosition MapTools::getEnemyStartLocation()
 {
-    return enemyBaseLocation;
+    return p_allMap.getEnemyStartLocation();
 }
 
 BWAPI::TilePosition MapTools::getSelfStartLocation()
 {
-    return selfBaseLocation;
+    return p_allMap.getSelfStartLocation();
 }
 
 void MapTools::testAssertFunction()
