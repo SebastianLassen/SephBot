@@ -35,6 +35,7 @@
     <ClInclude Include="..\src\BWEM 1.4.1\src\tiles.h" />
     <ClInclude Include="..\src\BWEM 1.4.1\src\utils.h" />
     <ClInclude Include="..\src\BWEM 1.4.1\src\winutils.h" />
+    <ClInclude Include="..\src\ChokePoints.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\Grid.hpp" />
     <ClInclude Include="..\src\MapTools.h" />
@@ -67,6 +68,7 @@
     <ClCompile Include="..\src\BWEM 1.4.1\src\tiles.cpp" />
     <ClCompile Include="..\src\BWEM 1.4.1\src\utils.cpp" />
     <ClCompile Include="..\src\BWEM 1.4.1\src\winutils.cpp" />
+    <ClCompile Include="..\src\ChokePoints.cpp" />
     <ClCompile Include="..\src\Common.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MapTools.cpp" />

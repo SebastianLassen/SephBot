@@ -68,7 +68,39 @@ void MapTools::onStart()
         }
     }
 
-    p_allMap.Initialize();
+    p_bases.clear();
+
+    BWEM::Map::Instance().Initialize();
+    BWEM::Map::Instance().EnableAutomaticPathAnalysis();
+    bool startingLocationsOK = BWEM::Map::Instance().FindBasesForStartingLocations();
+    assert(startingLocationsOK);
+
+    if (useMapPrinter)
+    {
+        BWEM::utils::MapPrinter::Initialize(&BWEM::Map::Instance());
+        BWEM::utils::printMap(BWEM::Map::Instance());      // will print the map into the file <StarCraftFolder>bwapi-data/map.bmp
+        BWEM::utils::pathExample(BWEM::Map::Instance());   // add to the printed map a path between two starting locations
+    }
+
+    // Initialize the bases
+    for (const auto& area : BWEM::Map::Instance().Areas())
+    {
+
+        for (const auto& base : area.Bases())
+        {
+            auto newBase = new Base(p_bases.size() + 1, base.Location(), &base);
+            if (base.Starting())
+            {
+                newBase->isStartLocation(true);
+            }
+            if (base.Location() == BWAPI::Broodwar->self()->getStartLocation())
+            {
+                newBase->getOwner(BWAPI::Broodwar->self());
+            }
+
+            p_bases.push_back(newBase);
+        }
+    }
 }
 
 void MapTools::onFrame()
@@ -291,7 +323,13 @@ void MapTools::draw() const
 
 void MapTools::setEnemyStartLocation(BWAPI::TilePosition pos)
 {
-    enemyBaseLocation = pos;
+    for (auto& base : p_bases)
+    {
+        if (base->getDepotLocation() == pos && base->isStartLocation())
+        {
+            base->getOwner(BWAPI::Broodwar->enemy());
+        }
+    }
 }
 
 bool MapTools::isEnemyBaseFound(bool found)
@@ -305,12 +343,120 @@ bool MapTools::isEnemyBaseFound(bool found)
 
 BWAPI::TilePosition MapTools::getEnemyStartLocation()
 {
-    return p_allMap.getEnemyStartLocation();
+    for (auto& base : p_bases)
+    {
+        if (base->getOwner() == BWAPI::Broodwar->enemy() && base->isStartLocation())
+        {
+            return base->getDepotLocation();
+        }
+    }
+    
+    return BWAPI::TilePositions::None;
 }
 
 BWAPI::TilePosition MapTools::getSelfStartLocation()
 {
-    return p_allMap.getSelfStartLocation();
+    for (auto& base : p_bases)
+    {
+        if (base->getOwner() == BWAPI::Broodwar->self() && base->isStartLocation())
+        {
+            return base->getDepotLocation();
+        }
+    }
+
+    return BWAPI::TilePositions::None;
+}
+
+std::vector<Base*>& MapTools::getAllBases()
+{
+    return p_bases;
+}
+
+std::vector<Base*>& MapTools::getMyBases()
+{
+    std::vector<Base*> p_myBases;
+
+    for (auto& base : p_bases)
+    {
+        if (base->getOwner() == BWAPI::Broodwar->self())
+        {
+            p_myBases.push_back(base);
+        }
+    }
+
+    return p_myBases;
+}
+
+std::vector<Base*>& MapTools::getEnemyBases()
+{
+    std::vector<Base*> p_enemyBases;
+
+    for (auto& base : p_bases)
+    {
+        if (base->getOwner() == BWAPI::Broodwar->enemy())
+        {
+            p_enemyBases.push_back(base);
+        }
+    }
+
+    return p_enemyBases;
+}
+
+Base* MapTools::getMainBase()
+{
+    for (auto& base : p_bases)
+    {
+        if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->self()
+            && base->getID(*base) == 1)
+        {
+            return base;
+        }
+    }
+    return nullptr;
+}
+
+Base* MapTools::getNaturalBase()
+{
+   assert(1 == 2);
+   /*
+       for (auto& base : p_bases)
+    {
+        if (base->isNaturalBase() && base->getOwner() == BWAPI::Broodwar->self())
+        {
+            return base;
+        }
+    }
+    return nullptr;
+
+   */
+}
+
+Base* MapTools::getEnemyMain()
+{
+    for (auto& base : p_bases)
+    {
+        if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->enemy())
+        {
+            return base;
+        }
+    }
+    return nullptr;
+}
+
+Base* MapTools::getEnemyNatural()
+{
+    assert(1 == 2);
+    /*
+        for (auto& base : p_bases)
+     {
+         if (base->isNaturalBase() && base->getOwner() == BWAPI::Broodwar->enemy())
+         {
+             return base;
+         }
+     }
+     return nullptr;
+
+    */
 }
 
 void MapTools::testAssertFunction()

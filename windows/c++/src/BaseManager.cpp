@@ -39,13 +39,18 @@ const std::vector<BWAPI::Position>& Base::getGeyserPos() const
     return p_geysersPos;
 }
 
-BWAPI::Player Base::getOwner(BWAPI::Player owner = nullptr)
+BWAPI::Player Base::getOwner(BWAPI::Player owner)
 {
     if (owner)
     {
         p_owner = owner;
     }
     return p_owner;
+}
+
+const int Base::getID(const Base& base) const
+{
+    return base.p_baseID;
 }
 
 int	Base::minerals() const

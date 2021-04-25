@@ -21,6 +21,10 @@ void BuildOrder::setBuildOrder()
 	newItem.type = BWAPI::UnitTypes::Protoss_Gateway;
 	p_buildOrderItems.push_back(newItem);
 
+	newItem.supply = 15;
+	newItem.type = BWAPI::UnitTypes::Protoss_Pylon;
+	p_buildOrderItems.push_back(newItem);
+
 	/*
 	newItem.supply = 8;
 	newItem.type = BWAPI::UnitTypes::Protoss_Pylon;
@@ -64,9 +68,11 @@ void BuildOrder::setMidGameBuildOrder()
 {
 	BuildOrderItem newItem;
 
+	/*
 	newItem.supply = 15;
 	newItem.type = BWAPI::UnitTypes::Protoss_Assimilator;
 	p_buildOrderItems.push_back(newItem);
+	*/
 	
 	newItem.supply = 22;
 	newItem.type = BWAPI::UnitTypes::Protoss_Gateway;

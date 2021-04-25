@@ -3,7 +3,10 @@
 #include "Grid.hpp"
 
 #include "Common.h"
-#include "Map.h"
+#include "BWEM 1.4.1/src/bwem.h"
+#include "BaseManager.h"
+#include <windows.h>
+
 
 class MapTools
 {
@@ -26,8 +29,9 @@ class MapTools
     bool canWalk(int tileX, int tileY) const;
     void printMap() const;
 
+    std::vector<Base*>	p_bases;
 
-    Map p_allMap;
+    bool	useMapPrinter = false;
 
 public:
 
@@ -60,6 +64,15 @@ public:
     bool                  isEnemyBaseFound(bool found = false);
     BWAPI::TilePosition   getEnemyStartLocation();
     BWAPI::TilePosition   getSelfStartLocation();
+
+    std::vector<Base*>&  getAllBases();
+    std::vector<Base*>&  getMyBases();
+    std::vector<Base*>&  getEnemyBases();
+
+    Base*       getMainBase();
+    Base*       getNaturalBase();
+    Base*       getEnemyMain();
+    Base*       getEnemyNatural();
 
     void                  testAssertFunction();
     void                  drawTestTiles();

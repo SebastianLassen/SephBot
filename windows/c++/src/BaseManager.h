@@ -36,9 +36,10 @@ public:
 
 	BWAPI::Player	getOwner(BWAPI::Player owner = nullptr);
 
-	int		minerals() const;
-	int		gas() const;
-	bool	isStartLocation(bool startLocation = false);
+	const int	getID(const Base& base) const;
+	int			minerals() const;
+	int			gas() const;
+	bool		isStartLocation(bool startLocation = false);
 
 
 

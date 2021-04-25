@@ -67,6 +67,7 @@
     <ClCompile Include="..\src\BWEM 1.4.1\EasyBMP_1.06\EasyBMP.cpp">
       <Filter>BWEM</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ChokePoints.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseManager.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="..\src\BWEM 1.4.1\EasyBMP_1.06\EasyBMP.h">
       <Filter>BWEM</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ChokePoints.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BWEM">

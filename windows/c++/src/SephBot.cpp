@@ -157,7 +157,7 @@ void SephBot::sendScout()
 
     BWAPI::TilePosition tempPos = Global::Map().getEnemyStartLocation();
 
-    if (tempPos != BWAPI::TilePositions::Unknown)
+    if (tempPos != BWAPI::TilePositions::None)
     {
         if (BWAPI::Broodwar->isVisible(tempPos) || BWAPI::Broodwar->isExplored(tempPos))
         {
