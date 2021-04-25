@@ -4,6 +4,7 @@
 #include "BuildingData.h"
 #include "Global.h"
 #include "ProductionManager.h"
+#include "Workers.h"
 
 #include "BWEM 1.4.1/src/bwem.h"
 #include <iostream>
@@ -26,6 +27,7 @@ void SephBot::onStart()
     // Call MapTools OnStart
     Global::Map().onStart();
     Global::Production().onStart();
+    Global::Worker().initialWorkerToMinerals();
 
 }
 
@@ -45,7 +47,7 @@ void SephBot::onFrame()
     sendIdleWorkersToMinerals();
 
     // Send a worker to scout
-    if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 7) { sendScout(); }
+    if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 14) { sendScout(); }
 
     // Follow the build order
     Global::Production().onFrame();
@@ -83,7 +85,8 @@ void SephBot::sendIdleWorkersToMinerals()
         // Check the unit type, if it is an idle worker, then we want to send it somewhere
         if (unit->getType().isWorker() && unit->isIdle())
         {
-            unit->gather(unit->getClosestUnit(BWAPI::Filter::IsMineralField || BWAPI::Filter::IsRefinery));
+            Global::Worker().assignToMinerals(unit);
+            //unit->gather(unit->getClosestUnit(BWAPI::Filter::IsMineralField || BWAPI::Filter::IsRefinery));
             /*
             // Get the closest mineral to this worker unit
             BWAPI::Unit closestMineral = Tools::GetClosestUnitTo(unit, BWAPI::Broodwar->getMinerals());
@@ -167,6 +170,7 @@ void SephBot::sendScout()
                 {
                     Global::Map().isEnemyBaseFound(true);
                     Global::Map().setEnemyStartLocation(tempPos);
+                    BWAPI::Broodwar << "Found enemy base" << std::endl;
                     p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
                     return;
                 }
@@ -227,6 +231,8 @@ void SephBot::sendUnitsToAttack()
     {
         return;
     }
+
+    BWAPI::Broodwar << "In here" << std::endl;
 
     BWAPI::Position pos(Global::Map().getEnemyStartLocation());
     const BWAPI::Unitset& myUnits = BWAPI::Broodwar->self()->getUnits();

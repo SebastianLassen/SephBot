@@ -406,8 +406,7 @@ Base* MapTools::getMainBase()
 {
     for (auto& base : p_bases)
     {
-        if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->self()
-            && base->getID(*base) == 1)
+        if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->self())
         {
             return base;
         }
@@ -429,6 +428,7 @@ Base* MapTools::getNaturalBase()
     return nullptr;
 
    */
+   return nullptr;
 }
 
 Base* MapTools::getEnemyMain()
@@ -457,6 +457,7 @@ Base* MapTools::getEnemyNatural()
      return nullptr;
 
     */
+    return nullptr;
 }
 
 void MapTools::testAssertFunction()

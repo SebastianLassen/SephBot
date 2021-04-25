@@ -43,6 +43,7 @@
     <ClInclude Include="..\src\SephBot.h" />
     <ClInclude Include="..\src\Global.h" />
     <ClInclude Include="..\src\Tools.h" />
+    <ClInclude Include="..\src\Workers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseManager.cpp" />
@@ -76,6 +77,7 @@
     <ClCompile Include="..\src\SephBot.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />
+    <ClCompile Include="..\src\Workers.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>StarterBot</ProjectName>
@@ -133,7 +135,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../bwapi/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/BWEM 1.4.1;../bwapi/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EXAMPLEAIMODULE_EXPORTS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

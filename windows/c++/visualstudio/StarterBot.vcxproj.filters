@@ -68,6 +68,7 @@
       <Filter>BWEM</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ChokePoints.cpp" />
+    <ClCompile Include="..\src\Workers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseManager.h" />
@@ -140,6 +141,7 @@
       <Filter>BWEM</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ChokePoints.h" />
+    <ClInclude Include="..\src\Workers.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BWEM">

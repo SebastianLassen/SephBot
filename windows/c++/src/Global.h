@@ -4,11 +4,13 @@
 
 class MapTools;
 class ProductionManager;
+class Workers;
 
 class Global
 {
     MapTools*           p_mapTools = nullptr;
     ProductionManager*  p_productionManager = nullptr;
+    Workers*            p_workers = nullptr;
 
 
     template <class T>
@@ -34,5 +36,6 @@ public:
     static void                 GameStart();
     static MapTools&            Map();
     static ProductionManager&   Production();
+    static Workers&             Worker();
 
 };
