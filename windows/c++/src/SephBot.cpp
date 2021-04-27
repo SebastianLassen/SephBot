@@ -62,7 +62,7 @@ void SephBot::onFrame()
     //Tools::DrawUnitHealthBars();
 
     // Send combat units to attack
-    sendUnitsToAttack();
+    //sendUnitsToAttack();
 
     // Draw some relevent information to the screen to help us debug the bot
     drawDebugInformation();
@@ -249,16 +249,15 @@ void SephBot::sendUnitsToAttack()
 // Called whenever a unit is destroyed, with a pointer to the unit
 void SephBot::onUnitDestroy(BWAPI::Unit unit)
 {
-    /*
-    if (!unit) { return; }
+    // MIGHT MOVE THIS LATER TO CLEAR UP SEPHBOT.CPP
     if (unit->getPlayer() == BWAPI::Broodwar->self())
     {
-        if (!unit->getType().isBuilding())
+        if (unit->getType().isWorker())
         {
-            p_unitManager.removeFromUnits(unit);
+            Global::Worker().removeFromResource(unit);
         }
     }
-    */
+    
 }
 
 // Called whenever a unit is morphed, with a pointer to the unit

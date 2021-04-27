@@ -65,5 +65,19 @@ void Workers::assignToMinerals(BWAPI::Unit unit)
 		unit->gather(patch);
 		break;
 	}
+}
 
+void Workers::removeFromResource(BWAPI::Unit unit)
+{
+	for (auto& patch : p_mineralPatches)
+	{
+		auto& it = std::find(patch.second.begin(), patch.second.end(), unit);
+
+		if (it != patch.second.end())
+		{
+			BWAPI::Broodwar << unit->getType().getName() << std::endl;
+			patch.second.erase(it);
+			return;
+		}
+	}
 }
