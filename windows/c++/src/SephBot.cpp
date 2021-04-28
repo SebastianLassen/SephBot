@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "ProductionManager.h"
 #include "Workers.h"
+#include "Squads.h"
 
 #include "BWEM 1.4.1/src/bwem.h"
 #include <iostream>
@@ -223,6 +224,26 @@ void SephBot::sendScout()
 
 void SephBot::sendUnitsToAttack()
 {
+    if (!(Global::Squads().getSquadSize("Protoss_Zealot") > 2))
+    {
+        return;
+    }
+    
+    if (!Global::Map().isEnemyBaseFound())
+    {
+        return;
+    }
+
+    BWAPI::Position pos(Global::Map().getEnemyStartLocation());
+
+    for (auto& unit : Global::Squads().getSquad("Protoss_Zealot").units)
+    {
+        if (!unit->isIdle()) { continue; }
+
+        unit->attack(pos);
+    }
+
+    /*
     if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->getUnits()) < 3)
     {
         return;
@@ -245,6 +266,7 @@ void SephBot::sendUnitsToAttack()
             unit->attack(pos);
         }
     }
+    */
 }
 
 // Called whenever a unit is destroyed, with a pointer to the unit
@@ -288,7 +310,11 @@ void SephBot::onUnitCreate(BWAPI::Unit unit)
 // Called whenever a unit finished construction, with a pointer to the unit
 void SephBot::onUnitComplete(BWAPI::Unit unit)
 {
-
+    if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot &&
+        unit->getPlayer() == BWAPI::Broodwar->self())
+    {
+        Global::Squads().addToSquad(unit);
+    }
 }
 
 // Called whenever a unit appears, with a pointer to the destroyed unit

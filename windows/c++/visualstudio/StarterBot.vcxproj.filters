@@ -69,6 +69,8 @@
     </ClCompile>
     <ClCompile Include="..\src\ChokePoints.cpp" />
     <ClCompile Include="..\src\Workers.cpp" />
+    <ClCompile Include="..\src\Squads.cpp" />
+    <ClCompile Include="..\src\Units.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseManager.h" />
@@ -142,6 +144,8 @@
     </ClInclude>
     <ClInclude Include="..\src\ChokePoints.h" />
     <ClInclude Include="..\src\Workers.h" />
+    <ClInclude Include="..\src\Squads.h" />
+    <ClInclude Include="..\src\Units.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BWEM">
