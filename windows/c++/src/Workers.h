@@ -23,8 +23,9 @@ public:
 
 	void		initialWorkerToMinerals();
 	void		assignToMinerals(BWAPI::Unit unit);
-	//void		removeFromResource(BWAPI::Unit unit, std::map<BWAPI::Unit, std::vector<BWAPI::Unit>>& resourceMap);
 	void		removeFromResource(BWAPI::Unit unit);
+	void		removeFromResource(BWAPI::Unit patch, BWAPI::Unit worker);
+	void		issueGatherOrder();
 
 
 

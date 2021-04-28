@@ -59,7 +59,7 @@ void Workers::assignToMinerals(BWAPI::Unit unit)
 	for (auto& patch : mineralPatches)
 	{
 		int assignedWorkers = p_mineralPatches[patch].size();
-		if (assignedWorkers == 3) { continue; }
+		if (assignedWorkers >= 2) { continue; }
 
 		p_mineralPatches[patch].push_back(unit);
 		unit->gather(patch);
@@ -75,9 +75,42 @@ void Workers::removeFromResource(BWAPI::Unit unit)
 
 		if (it != patch.second.end())
 		{
-			BWAPI::Broodwar << unit->getType().getName() << std::endl;
+			//BWAPI::Broodwar << unit->getType().getName() << BWAPI::Broodwar->getFrameCount() << std::endl;
 			patch.second.erase(it);
 			return;
+		}
+	}
+}
+
+void Workers::removeFromResource(BWAPI::Unit patch, BWAPI::Unit worker)
+{
+	auto& it = std::find(p_mineralPatches[patch].begin(), p_mineralPatches[patch].end(), worker);
+
+	if (it != p_mineralPatches[patch].end())
+	{
+		//BWAPI::Broodwar << worker->getType().getName() << BWAPI::Broodwar->getFrameCount() << std::endl;
+		p_mineralPatches[patch].erase(it);
+	}
+}
+
+
+void Workers::issueGatherOrder()
+{
+	for (auto& patch : p_mineralPatches)
+	{
+		for (auto& worker : patch.second)
+		{
+			if (worker->getDistance(Tools::GetDepot()) > 500)
+			{
+				removeFromResource(patch.first, worker);
+			}
+			
+			if (worker->isIdle() && worker->isCarryingMinerals())
+			{
+				worker->returnCargo();
+			}
+
+			worker->gather(patch.first);
 		}
 	}
 }

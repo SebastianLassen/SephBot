@@ -62,7 +62,7 @@ void SephBot::onFrame()
     //Tools::DrawUnitHealthBars();
 
     // Send combat units to attack
-    //sendUnitsToAttack();
+    sendUnitsToAttack();
 
     // Draw some relevent information to the screen to help us debug the bot
     drawDebugInformation();
@@ -96,6 +96,7 @@ void SephBot::sendIdleWorkersToMinerals()
             */
         }
     }
+    //Global::Worker().issueGatherOrder();
 }
 
 // Train more workers so we can gather more income
