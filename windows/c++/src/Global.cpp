@@ -3,6 +3,7 @@
 #include "MapTools.h"
 #include "ProductionManager.h"
 #include "Workers.h"
+#include "Squads.h"
 
 Global::Global()
 {
@@ -20,6 +21,7 @@ void Global::init()
 	reset(p_mapTools);
 	reset(p_productionManager);
 	reset(p_workers);
+	reset(p_squads);
 }
 
 void Global::GameStart()
@@ -30,3 +32,4 @@ void Global::GameStart()
 MapTools &				Global::Map()				{ return *get(Instance().p_mapTools); }
 ProductionManager &		Global::Production()		{ return *get(Instance().p_productionManager); }
 Workers&				Global::Worker()			{ return *get(Instance().p_workers); }
+Squads&					Global::Squads()			{ return *get(Instance().p_squads); }

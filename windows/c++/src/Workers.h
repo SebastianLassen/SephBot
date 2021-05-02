@@ -23,6 +23,9 @@ public:
 
 	void		initialWorkerToMinerals();
 	void		assignToMinerals(BWAPI::Unit unit);
+	void		removeFromResource(BWAPI::Unit unit);
+	void		removeFromResource(BWAPI::Unit patch, BWAPI::Unit worker);
+	void		issueGatherOrder();
 
 
 
