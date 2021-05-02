@@ -20,8 +20,6 @@ void MapTools::onStart()
     m_buildable         = Grid<int>(m_width, m_height, 0);
     m_depotBuildable    = Grid<int>(m_width, m_height, 0);
     m_lastSeen          = Grid<int>(m_width, m_height, 0);
-    enemyBaseLocation   = BWAPI::TilePositions::Unknown;
-    selfBaseLocation    = BWAPI::Broodwar->self()->getStartLocation();
 
     // Set the boolean grid data from the Map
     for (int x(0); x < m_width; ++x)
@@ -82,6 +80,7 @@ void MapTools::onStart()
         BWEM::utils::pathExample(BWEM::Map::Instance());   // add to the printed map a path between two starting locations
     }
 
+    
     // Initialize the bases
     for (const auto& area : BWEM::Map::Instance().Areas())
     {
@@ -96,11 +95,14 @@ void MapTools::onStart()
             if (base.Location() == BWAPI::Broodwar->self()->getStartLocation())
             {
                 newBase->getOwner(BWAPI::Broodwar->self());
+                myMain = newBase;
             }
 
             p_bases.push_back(newBase);
         }
     }
+
+    myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
 }
 
 void MapTools::onFrame()
@@ -321,6 +323,22 @@ void MapTools::draw() const
    
 }
 
+Base* MapTools::setSelfNaturalExpansion(BWAPI::TilePosition startLocation)
+{
+    Base* findingNatural = nullptr;
+    int bestDist = INT_MAX;
+
+    
+    for (auto& base : p_bases)
+    {
+        if (base->getDepotLocation() == startLocation) { continue; }
+        if (base->gas() == 0) { continue; }
+        
+
+
+    }
+}
+
 void MapTools::setEnemyStartLocation(BWAPI::TilePosition pos)
 {
     for (auto& base : p_bases)
@@ -328,6 +346,7 @@ void MapTools::setEnemyStartLocation(BWAPI::TilePosition pos)
         if (base->getDepotLocation() == pos && base->isStartLocation())
         {
             base->getOwner(BWAPI::Broodwar->enemy());
+            enemyMain = base;
         }
     }
 }
@@ -343,6 +362,7 @@ bool MapTools::isEnemyBaseFound(bool found)
 
 BWAPI::TilePosition MapTools::getEnemyStartLocation()
 {
+    /*
     for (auto& base : p_bases)
     {
         if (base->getOwner() == BWAPI::Broodwar->enemy() && base->isStartLocation())
@@ -350,18 +370,29 @@ BWAPI::TilePosition MapTools::getEnemyStartLocation()
             return base->getDepotLocation();
         }
     }
+    */
+    if (enemyMain)
+    {
+        return enemyMain->getDepotLocation();
+    }
     
     return BWAPI::TilePositions::None;
 }
 
 BWAPI::TilePosition MapTools::getSelfStartLocation()
 {
+    /*
     for (auto& base : p_bases)
     {
         if (base->getOwner() == BWAPI::Broodwar->self() && base->isStartLocation())
         {
             return base->getDepotLocation();
         }
+    }
+    */
+    if (myMain)
+    {
+        return myMain->getDepotLocation();
     }
 
     return BWAPI::TilePositions::None;
@@ -404,6 +435,7 @@ std::vector<Base*>& MapTools::getEnemyBases()
 
 Base* MapTools::getMainBase()
 {
+    /*
     for (auto& base : p_bases)
     {
         if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->self())
@@ -411,6 +443,12 @@ Base* MapTools::getMainBase()
             return base;
         }
     }
+    */
+    if (myMain)
+    {
+        return myMain;
+    }
+
     return nullptr;
 }
 
@@ -433,6 +471,7 @@ Base* MapTools::getNaturalBase()
 
 Base* MapTools::getEnemyMain()
 {
+    /*
     for (auto& base : p_bases)
     {
         if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->enemy())
@@ -440,6 +479,12 @@ Base* MapTools::getEnemyMain()
             return base;
         }
     }
+    */
+    if (enemyMain)
+    {
+        return enemyMain;
+    }
+
     return nullptr;
 }
 

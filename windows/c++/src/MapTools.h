@@ -22,14 +22,17 @@ class MapTools
     bool        m_drawMap = false;
 
     bool                    enemyBaseFound = false;
-    BWAPI::TilePosition     enemyBaseLocation;
-    BWAPI::TilePosition     selfBaseLocation;
 
     bool canBuild(int tileX, int tileY) const;
     bool canWalk(int tileX, int tileY) const;
     void printMap() const;
 
     std::vector<Base*>	p_bases;
+
+    Base*   myMain = nullptr;
+    Base*   myNatural = nullptr;
+    Base*   enemyMain = nullptr;
+    Base*   enemyNatural = nullptr;
 
     bool	useMapPrinter = false;
 
@@ -60,8 +63,9 @@ public:
     bool    isBuildable(const BWAPI::TilePosition& tile) const;
     bool    isDepotBuildableTile(int tileX, int tileY) const;
     void    drawTile(int tileX, int tileY, const BWAPI::Color & color) const;
-    void    setEnemyStartLocation(BWAPI::TilePosition pos);
 
+    Base*                 setSelfNaturalExpansion(BWAPI::TilePosition startLocation);
+    void                  setEnemyStartLocation(BWAPI::TilePosition pos);
     bool                  isEnemyBaseFound(bool found = false);
     BWAPI::TilePosition   getEnemyStartLocation();
     BWAPI::TilePosition   getSelfStartLocation();
