@@ -5,6 +5,7 @@
 #include "Common.h"
 #include "BWEM 1.4.1/src/bwem.h"
 #include "BaseManager.h"
+#include "ChokePoints.h"
 #include <windows.h>
 
 
@@ -28,11 +29,18 @@ class MapTools
     void printMap() const;
 
     std::vector<Base*>	p_bases;
+    std::set<ChokePoints*> p_chokePoints;
 
     Base*   myMain = nullptr;
     Base*   myNatural = nullptr;
     Base*   enemyMain = nullptr;
     Base*   enemyNatural = nullptr;
+
+    ChokePoints* myMainChokePoint = nullptr;
+    ChokePoints* myNaturalChokePoint = nullptr;
+    ChokePoints* enemyMainChokePoint = nullptr;
+    ChokePoints* enemyNaturalChokePoint = nullptr;
+
 
     bool	useMapPrinter = false;
 

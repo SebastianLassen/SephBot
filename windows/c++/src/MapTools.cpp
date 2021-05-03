@@ -67,6 +67,7 @@ void MapTools::onStart()
     }
 
     p_bases.clear();
+    p_chokePoints.clear();
 
     BWEM::Map::Instance().Initialize();
     BWEM::Map::Instance().EnableAutomaticPathAnalysis();
@@ -84,7 +85,6 @@ void MapTools::onStart()
     // Initialize the bases
     for (const auto& area : BWEM::Map::Instance().Areas())
     {
-
         for (const auto& base : area.Bases())
         {
             auto newBase = new Base(p_bases.size() + 1, base.Location(), &base);
@@ -100,6 +100,17 @@ void MapTools::onStart()
 
             p_bases.push_back(newBase);
         }
+
+        /*
+        for (const auto& choke : area.ChokePoints())
+        {
+            auto newChoke = new ChokePoints(choke);
+            
+            
+
+            p_chokePoints.insert(newChoke);
+        }
+        */
     }
 
    myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
