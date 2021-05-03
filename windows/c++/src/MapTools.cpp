@@ -105,9 +105,6 @@ void MapTools::onStart()
    myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
 
 
-   if (!myNatural) { BWAPI::Broodwar << "Also one out here nullptr?" << std::endl; }
-   else if (myNatural) { BWAPI::Broodwar << "NOT nullptr?" << std::endl; }
-
 }
 
 void MapTools::onFrame()

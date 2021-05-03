@@ -48,7 +48,7 @@ void SephBot::onFrame()
     sendIdleWorkersToMinerals();
 
     // Send a worker to scout
-    if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 14) { sendScout(); }
+    if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 7) { sendScout(); }
 
     // Follow the build order
     Global::Production().onFrame();
@@ -176,7 +176,8 @@ void SephBot::sendScout()
         {
             for (auto& unit : BWAPI::Broodwar->enemy()->getUnits())
             {
-                if (unit->getType().isResourceDepot() && unit->getTilePosition() == tempPos)
+                //if (unit->getType().isResourceDepot() && unit->getTilePosition() == tempPos)
+                if (unit->isVisible() && unit->getDistance(BWAPI::Position (tempPos)) <= 1200)
                 {
                     Global::Map().isEnemyBaseFound(true);
                     Global::Map().setEnemyStartLocation(tempPos);
@@ -202,7 +203,7 @@ void SephBot::sendScout()
 
 void SephBot::sendUnitsToAttack()
 {
-    if (!(Global::Squads().getSquadSize("Protoss_Zealot") > 2))
+    if (!(Global::Squads().getSquadSize("Protoss_Zealot") > 3))
     {
         return;
     }

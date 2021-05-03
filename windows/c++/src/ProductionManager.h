@@ -19,6 +19,8 @@ class ProductionManager
 	int		p_reservedMinerals = 0;
 	int		p_reservedGas = 0;
 
+	bool	naturalNexus = false;
+
 	std::vector<Building> p_buildings;
 
 public:

@@ -1,6 +1,7 @@
 #include "ProductionManager.h"
 #include "Tools.h"
 #include "Global.h"
+#include "MapTools.h"
 
 ProductionManager::ProductionManager()
 {
@@ -60,6 +61,33 @@ void ProductionManager::onFrame()
 			{
 				findItemToProduce(p_buildOrderMidGame);
 			}
+		}
+	}
+
+	if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Gateway, BWAPI::Broodwar->self()->getUnits()) == 4)
+	{
+		if (BWAPI::Broodwar->self()->minerals() > 500 && !naturalNexus)
+		{
+			BWAPI::UnitType type = BWAPI::UnitTypes::Protoss_Nexus;
+
+			p_reservedMinerals += type.mineralPrice();
+			p_reservedGas += type.gasPrice();
+
+			p_queue.addToQueue(type);
+
+			naturalNexus = true;
+
+			auto naturalBase = Global::Map().getNaturalBase();
+
+			if (naturalBase)
+			{
+				Building b(type, naturalBase->getDepotLocation());
+				p_buildings.push_back(b);
+
+
+				BWAPI::Broodwar << b.type.c_str() << std::endl;
+			}
+
 		}
 	}
 }
