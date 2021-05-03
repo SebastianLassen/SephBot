@@ -146,6 +146,14 @@ void SephBot::drawDebugInformation()
     BWAPI::Broodwar->drawTextScreen(BWAPI::Position(10, 10), "Hello, World!\n");
     Tools::DrawUnitCommands();
     Tools::DrawUnitBoundingBoxes();
+
+    if (!(Global::Map().getNaturalBase()))
+    {
+        return;
+    }
+
+    auto naturalBase = Global::Map().getNaturalBase()->getDepotLocation();
+    Global::Map().drawTile(naturalBase.x, naturalBase.y, BWAPI::Colors::Blue);
 }
 
 void SephBot::sendScout()
@@ -190,36 +198,6 @@ void SephBot::sendScout()
             break;
         }
     }
-
-
-    /*
-    for (BWAPI::TilePosition tp : startLocations)
-    {
-        if (BWAPI::Broodwar->isExplored(tp)) 
-        { 
-            for (auto& unit : BWAPI::Broodwar->enemy()->getUnits())
-            {
-                if (unit->getType().isResourceDepot() && unit->getTilePosition() == tp)
-                {
-                    p_mapTools.setEnemyStartLocation(tp);
-                    BWAPI::Position pos(p_mapTools.getSelfStartLocation());
-                    p_scout->move(pos);
-                    break;
-                }
-            }
-        }
-        else
-        {
-            if (p_scout)
-            {
-                BWAPI::Position pos(tp);
-
-                p_scout->move(pos);
-                break;
-            }
-        }
-    }
-    */
 }
 
 void SephBot::sendUnitsToAttack()
@@ -242,31 +220,6 @@ void SephBot::sendUnitsToAttack()
 
         unit->attack(pos);
     }
-
-    /*
-    if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Zealot, BWAPI::Broodwar->self()->getUnits()) < 3)
-    {
-        return;
-    }
-
-    if (!Global::Map().isEnemyBaseFound())
-    {
-        return;
-    }
-
-    BWAPI::Broodwar << "In here" << std::endl;
-
-    BWAPI::Position pos(Global::Map().getEnemyStartLocation());
-    const BWAPI::Unitset& myUnits = BWAPI::Broodwar->self()->getUnits();
-
-    for (auto& unit : myUnits)
-    {
-        if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot && unit->isIdle())
-        {
-            unit->attack(pos);
-        }
-    }
-    */
 }
 
 // Called whenever a unit is destroyed, with a pointer to the unit

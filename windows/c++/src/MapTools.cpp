@@ -104,6 +104,10 @@ void MapTools::onStart()
 
    myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
 
+
+   if (!myNatural) { BWAPI::Broodwar << "Also one out here nullptr?" << std::endl; }
+   else if (myNatural) { BWAPI::Broodwar << "NOT nullptr?" << std::endl; }
+
 }
 
 void MapTools::onFrame()
@@ -328,7 +332,7 @@ Base* MapTools::setSelfNaturalExpansion(BWAPI::TilePosition startLocation)
 {
     Base* findingNatural = nullptr;
     int bestDist = INT_MAX;
-    int dist = -1;
+    int dist = 0;
 
     
     for (auto& base : p_bases)
@@ -344,10 +348,9 @@ Base* MapTools::setSelfNaturalExpansion(BWAPI::TilePosition startLocation)
 
         bestDist = dist;
         findingNatural = base;
+
     }
     
-    if (!findingNatural) { return nullptr; }
-
     return findingNatural;
 }
 
@@ -447,15 +450,6 @@ std::vector<Base*> MapTools::getEnemyBases()
 
 Base* MapTools::getMainBase()
 {
-    /*
-    for (auto& base : p_bases)
-    {
-        if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->self())
-        {
-            return base;
-        }
-    }
-    */
     if (myMain)
     {
         return myMain;
@@ -466,32 +460,16 @@ Base* MapTools::getMainBase()
 
 Base* MapTools::getNaturalBase()
 {
-   assert(1 == 2);
-   /*
-       for (auto& base : p_bases)
+    if (myNatural)
     {
-        if (base->isNaturalBase() && base->getOwner() == BWAPI::Broodwar->self())
-        {
-            return base;
-        }
+        return myNatural;
     }
-    return nullptr;
 
-   */
-   return nullptr;
+    return nullptr;
 }
 
 Base* MapTools::getEnemyMain()
 {
-    /*
-    for (auto& base : p_bases)
-    {
-        if (base->isStartLocation() && base->getOwner() == BWAPI::Broodwar->enemy())
-        {
-            return base;
-        }
-    }
-    */
     if (enemyMain)
     {
         return enemyMain;
@@ -503,17 +481,8 @@ Base* MapTools::getEnemyMain()
 Base* MapTools::getEnemyNatural()
 {
     assert(1 == 2);
-    /*
-        for (auto& base : p_bases)
-     {
-         if (base->isNaturalBase() && base->getOwner() == BWAPI::Broodwar->enemy())
-         {
-             return base;
-         }
-     }
-     return nullptr;
 
-    */
+
     return nullptr;
 }
 
