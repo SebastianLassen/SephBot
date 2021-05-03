@@ -103,11 +103,13 @@ void Workers::issueGatherOrder()
 			if (worker->getDistance(Tools::GetDepot()) > 500)
 			{
 				removeFromResource(patch.first, worker);
+				continue;
 			}
 			
 			if (worker->isIdle() && worker->isCarryingMinerals())
 			{
 				worker->returnCargo();
+				continue;
 			}
 
 			worker->gather(patch.first);

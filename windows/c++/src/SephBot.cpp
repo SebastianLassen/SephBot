@@ -97,7 +97,7 @@ void SephBot::sendIdleWorkersToMinerals()
             */
         }
     }
-    //Global::Worker().issueGatherOrder();
+    Global::Worker().issueGatherOrder();
 }
 
 // Train more workers so we can gather more income
@@ -150,7 +150,7 @@ void SephBot::drawDebugInformation()
 
 void SephBot::sendScout()
 {
-    if (Global::Map().isEnemyBaseFound())
+    if (Global::Map().isEnemyBaseFound() && Global::Map().getEnemyMain())
     {
         return;
     }
