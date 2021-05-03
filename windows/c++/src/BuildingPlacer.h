@@ -19,7 +19,7 @@ public:
 	void					addBuildingPosition(const Building& b);
 	void					removeBuildingPosition(BWAPI::TilePosition pos);
 
-	std::vector<BWAPI::TilePosition> &	getBuildingPositions();
+	std::vector<BWAPI::TilePosition>  getBuildingPositions();
 
 	bool					canBuildHereWithSpace(BWAPI::TilePosition pos, const Building& b, int buildDist);
 	bool					buildable(const Building& b, int x, int y) const;

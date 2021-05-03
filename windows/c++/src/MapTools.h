@@ -71,8 +71,8 @@ public:
     BWAPI::TilePosition   getSelfStartLocation();
 
     std::vector<Base*>&  getAllBases();
-    std::vector<Base*>&  getMyBases();
-    std::vector<Base*>&  getEnemyBases();
+    std::vector<Base*>   getMyBases();
+    std::vector<Base*>   getEnemyBases();
 
     Base*       getMainBase();
     Base*       getNaturalBase();

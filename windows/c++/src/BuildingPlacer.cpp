@@ -28,7 +28,7 @@ void BuildingPlacer::removeBuildingPosition(BWAPI::TilePosition pos)
 }
 
 
-std::vector<BWAPI::TilePosition>& BuildingPlacer::getBuildingPositions()
+std::vector<BWAPI::TilePosition> BuildingPlacer::getBuildingPositions()
 {
 	std::vector<BWAPI::TilePosition> buildingPositions;
 	for (auto& b : p_buildingPositions)

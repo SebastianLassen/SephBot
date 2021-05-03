@@ -102,7 +102,8 @@ void MapTools::onStart()
         }
     }
 
-    myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
+   myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
+
 }
 
 void MapTools::onFrame()
@@ -327,6 +328,7 @@ Base* MapTools::setSelfNaturalExpansion(BWAPI::TilePosition startLocation)
 {
     Base* findingNatural = nullptr;
     int bestDist = INT_MAX;
+    int dist = -1;
 
     
     for (auto& base : p_bases)
@@ -334,9 +336,19 @@ Base* MapTools::setSelfNaturalExpansion(BWAPI::TilePosition startLocation)
         if (base->getDepotLocation() == startLocation) { continue; }
         if (base->gas() == 0) { continue; }
         
+        BWEM::Map::Instance().GetPath(BWAPI::Position (startLocation), 
+                                      BWAPI::Position (base->getDepotLocation()), 
+                                      &dist);
 
+        if (dist == -1 || dist > bestDist) { continue; }
 
+        bestDist = dist;
+        findingNatural = base;
     }
+    
+    if (!findingNatural) { return nullptr; }
+
+    return findingNatural;
 }
 
 void MapTools::setEnemyStartLocation(BWAPI::TilePosition pos)
@@ -403,7 +415,7 @@ std::vector<Base*>& MapTools::getAllBases()
     return p_bases;
 }
 
-std::vector<Base*>& MapTools::getMyBases()
+std::vector<Base*> MapTools::getMyBases()
 {
     std::vector<Base*> p_myBases;
 
@@ -418,7 +430,7 @@ std::vector<Base*>& MapTools::getMyBases()
     return p_myBases;
 }
 
-std::vector<Base*>& MapTools::getEnemyBases()
+std::vector<Base*> MapTools::getEnemyBases()
 {
     std::vector<Base*> p_enemyBases;
 
