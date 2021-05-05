@@ -6,6 +6,7 @@ class MapTools;
 class ProductionManager;
 class Workers;
 class Squads;
+class StateInformation;
 
 class Global
 {
@@ -13,6 +14,7 @@ class Global
     ProductionManager*  p_productionManager = nullptr;
     Workers*            p_workers = nullptr;
     Squads*             p_squads = nullptr;
+    StateInformation*   p_stateInfo = nullptr;
 
 
     template <class T>
@@ -40,5 +42,6 @@ public:
     static ProductionManager&   Production();
     static Workers&             Worker();
     static Squads&              Squads();
+    static StateInformation&    StateInfo();
 
 };

@@ -71,6 +71,7 @@
     <ClCompile Include="..\src\Workers.cpp" />
     <ClCompile Include="..\src\Squads.cpp" />
     <ClCompile Include="..\src\Units.cpp" />
+    <ClCompile Include="..\src\StateInformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseManager.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="..\src\Workers.h" />
     <ClInclude Include="..\src\Squads.h" />
     <ClInclude Include="..\src\Units.h" />
+    <ClInclude Include="..\src\StateInformation.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BWEM">

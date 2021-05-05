@@ -43,6 +43,7 @@
     <ClInclude Include="..\src\SephBot.h" />
     <ClInclude Include="..\src\Global.h" />
     <ClInclude Include="..\src\Squads.h" />
+    <ClInclude Include="..\src\StateInformation.h" />
     <ClInclude Include="..\src\Tools.h" />
     <ClInclude Include="..\src\Units.h" />
     <ClInclude Include="..\src\Workers.h" />
@@ -79,6 +80,7 @@
     <ClCompile Include="..\src\SephBot.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\Squads.cpp" />
+    <ClCompile Include="..\src\StateInformation.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />
     <ClCompile Include="..\src\Units.cpp" />
     <ClCompile Include="..\src\Workers.cpp" />
