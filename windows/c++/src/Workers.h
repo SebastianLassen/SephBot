@@ -7,7 +7,7 @@
 
 namespace WorkerJob
 {
-	enum { Unassigned = 0, Minerals = 1, Gas = 2, Reserved = 3 };
+	enum { Unassigned = 0, Minerals = 1, Gas = 2, Scouting = 4, Reserved = 5 };
 }
 
 
