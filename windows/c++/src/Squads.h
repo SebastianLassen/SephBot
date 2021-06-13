@@ -25,6 +25,7 @@ public:
 	Squads();
 
 	void				addToSquad(BWAPI::Unit unit);
+	void				removeFromSquad(BWAPI::Unit unit);
 	int					getSquadSize(std::string unitName);
 	const SquadData&	getSquad(std::string unitName);
 

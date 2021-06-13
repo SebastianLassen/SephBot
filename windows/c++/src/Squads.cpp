@@ -18,6 +18,12 @@ void Squads::addToSquad(BWAPI::Unit unit)
 	p_squads[unitName].units.insert(unit);
 }
 
+void Squads::removeFromSquad(BWAPI::Unit unit)
+{
+	std::string unitName = unit->getType().getName();
+	p_squads[unitName].units.erase(unit);
+}
+
 int	Squads::getSquadSize(std::string unitName)
 {
 	return p_squads[unitName].units.size();

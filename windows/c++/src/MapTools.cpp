@@ -101,20 +101,17 @@ void MapTools::onStart()
             p_bases.push_back(newBase);
         }
 
-        /*
         for (const auto& choke : area.ChokePoints())
         {
             auto newChoke = new ChokePoints(choke);
-            
-            
 
             p_chokePoints.insert(newChoke);
         }
-        */
     }
 
    myNatural = setSelfNaturalExpansion(myMain->getDepotLocation());
-
+    
+   myMainChokePoint = computeMainChoke(myMain, myNatural);
 
 }
 
@@ -374,6 +371,32 @@ void MapTools::setEnemyStartLocation(BWAPI::TilePosition pos)
     }
 }
 
+ChokePoints* MapTools::computeMainChoke(Base* myMain, Base* myNatural)
+{
+    if (!myMain || !myNatural) { return nullptr; }
+
+    ChokePoints* bestChoke = nullptr;
+
+    auto mainArea    = myMain->getArea();
+    auto naturalArea = myNatural->getArea();
+    auto areaCheck1 = std::make_pair(mainArea, naturalArea);
+    auto areaCheck2 = std::make_pair(naturalArea, mainArea);
+
+    for (auto& elem : p_chokePoints)
+    {
+        auto& areasOfChoke = elem->choke->GetAreas();
+
+        if (areasOfChoke == areaCheck1 || areasOfChoke == areaCheck2)
+        {
+            bestChoke = elem;
+            break;
+        }
+    }
+
+    return bestChoke;
+
+}
+
 bool MapTools::isEnemyBaseFound(bool found)
 {
     if (found)
@@ -458,32 +481,17 @@ std::vector<Base*> MapTools::getEnemyBases()
 
 Base* MapTools::getMainBase()
 {
-    if (myMain)
-    {
-        return myMain;
-    }
-
-    return nullptr;
+    return myMain;
 }
 
 Base* MapTools::getNaturalBase()
 {
-    if (myNatural)
-    {
-        return myNatural;
-    }
-
-    return nullptr;
+    return myNatural;
 }
 
 Base* MapTools::getEnemyMain()
 {
-    if (enemyMain)
-    {
-        return enemyMain;
-    }
-
-    return nullptr;
+    return enemyMain;
 }
 
 Base* MapTools::getEnemyNatural()
@@ -492,6 +500,26 @@ Base* MapTools::getEnemyNatural()
 
 
     return nullptr;
+}
+
+ChokePoints* MapTools::getMainChoke()
+{
+    return myMainChokePoint;
+}
+
+ChokePoints* MapTools::getNaturalChoke()
+{
+    return myNaturalChokePoint;
+}
+
+ChokePoints* MapTools::getEnemyMainChoke()
+{
+    return enemyMainChokePoint;
+}
+
+ChokePoints* MapTools::getEnemyNaturalChoke()
+{
+    return enemyNaturalChokePoint;
 }
 
 void MapTools::testAssertFunction()

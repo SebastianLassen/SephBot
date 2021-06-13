@@ -16,8 +16,8 @@ class Base
 
 	std::vector<BWAPI::Position>	p_mineralsPos;
 	std::vector<BWAPI::Position>	p_geysersPos;
-
-	const BWEM::Base*				bwemBase;	
+     
+	const BWEM::Base*		bwemBase;	
 
 public:
 

@@ -41,7 +41,6 @@ class MapTools
     ChokePoints* enemyMainChokePoint = nullptr;
     ChokePoints* enemyNaturalChokePoint = nullptr;
 
-
     bool	useMapPrinter = false;
 
 public:
@@ -72,8 +71,9 @@ public:
     bool    isDepotBuildableTile(int tileX, int tileY) const;
     void    drawTile(int tileX, int tileY, const BWAPI::Color & color) const;
 
-    Base*                 setSelfNaturalExpansion(BWAPI::TilePosition startLocation);
+    Base*                 setSelfNaturalExpansion(BWAPI::TilePosition startLocation); 
     void                  setEnemyStartLocation(BWAPI::TilePosition pos);
+    ChokePoints*          computeMainChoke(Base* myMain, Base* myNatural);
     bool                  isEnemyBaseFound(bool found = false);
     BWAPI::TilePosition   getEnemyStartLocation();
     BWAPI::TilePosition   getSelfStartLocation();
@@ -86,6 +86,11 @@ public:
     Base*       getNaturalBase();
     Base*       getEnemyMain();
     Base*       getEnemyNatural();
+
+    ChokePoints*    getMainChoke();
+    ChokePoints*    getNaturalChoke();
+    ChokePoints*    getEnemyMainChoke();
+    ChokePoints*    getEnemyNaturalChoke();
 
     void                  testAssertFunction();
     void                  drawTestTiles();

@@ -132,10 +132,12 @@ void SephBot::trainAdditionalWorkers()
             
             if (myNaturalDepot && !myNaturalDepot->isTraining()) { myNaturalDepot->train(workerType); }
         }
-
-        // if we have a valid depot unit and it's currently not training something, train a worker
-        // there is no reason for a bot to ever use the unit queueing system, it just wastes resources
-        if (myDepot && !myDepot->isTraining()) { myDepot->train(workerType); }
+        else
+        {
+            // if we have a valid depot unit and it's currently not training something, train a worker
+            // there is no reason for a bot to ever use the unit queueing system, it just wastes resources
+            if (myDepot && !myDepot->isTraining()) { myDepot->train(workerType); }
+        }
     }
     
 }
@@ -241,9 +243,20 @@ void SephBot::sendUnitsToAttack()
 
     for (auto& unit : Global::Squads().getSquad("Protoss_Zealot").units)
     {
-        if (!unit->isIdle()) { continue; }
+        if (!unit->isIdle() && unit->isAttacking()) { continue; }
 
-        unit->attack(pos);
+        if (unit->isUnderAttack())
+        {
+            unit->attack(unit->getPosition());
+        }
+        else if (unit->getDistance(pos) < 10 && !unit->isAttacking())
+        {
+            unit->attack(unit->getClosestUnit(BWAPI::Filter::IsEnemy));
+        }
+        else
+        {
+            unit->attack(pos);
+        }
     }
 }
 
@@ -257,13 +270,17 @@ void SephBot::onUnitDestroy(BWAPI::Unit unit)
         {
             Global::Worker().removeFromResource(unit);
         }
+        else
+        {
+            Global::Squads().removeFromSquad(unit);
+            std::cout << Global::Squads().getSquadSize("Protoss_Zealot") << "\n";
+        }
     }
 
     if (unit->getType() == BWAPI::UnitTypes::Resource_Mineral_Field)
     {
         Global::Worker().removeResource(unit);
-    }
-    
+    }    
 }
 
 // Called whenever a unit is morphed, with a pointer to the unit
@@ -302,6 +319,8 @@ void SephBot::onUnitComplete(BWAPI::Unit unit)
         unit->getPlayer() == BWAPI::Broodwar->self())
     {
         Global::Squads().addToSquad(unit);
+        unit->attack(Global::Map().getMainChoke()->center);
+
     }
 }
 
