@@ -20,7 +20,7 @@ void SephBot::onStart()
 {
     // Set our BWAPI options here    
 	BWAPI::Broodwar->setLocalSpeed(10);
-    BWAPI::Broodwar->setFrameSkip(0);
+    BWAPI::Broodwar->setFrameSkip(1);
     
     // Enable the flag that tells BWAPI top let users enter input while bot plays
     BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
@@ -47,8 +47,10 @@ void SephBot::onFrame()
     // Send our idle workers to mine minerals so they don't just stand there
     sendIdleWorkersToMinerals();
 
+    Global::Worker().issueGatherOrder();
+
     // Send a worker to scout
-    if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 7) { sendScout(); }
+    if (BWAPI::Broodwar->self()->supplyUsed() / 2 >= 9) { sendScout(); }
 
     // Follow the build order
     Global::Production().onFrame();
@@ -69,8 +71,8 @@ void SephBot::onFrame()
     drawDebugInformation();
 
     /* TO MAKE SURE THAT ONFRAME ISNT RUN TOO MUCH - MIGHT NEED LATER
-    if (BWAPI::Broodwar->getFrameCount() % Broodwar->getLatencyFrames() != 0)
-        return;
+    if (BWAPI::Broodwar->getFrameCount() % BWAPI::Broodwar->getLatencyFrames() != 0)
+       return;
     */
 
 }
@@ -80,6 +82,7 @@ void SephBot::sendIdleWorkersToMinerals()
 {
     // Let's send all of our starting workers to the closest mineral to them
     // First we need to loop over all of the units that we (BWAPI::Broodwar->self()) own
+    
     const BWAPI::Unitset& myUnits = BWAPI::Broodwar->self()->getUnits();
     for (auto& unit : myUnits)
     {
@@ -97,7 +100,7 @@ void SephBot::sendIdleWorkersToMinerals()
             */
         }
     }
-    Global::Worker().issueGatherOrder();
+
 }
 
 // Train more workers so we can gather more income
@@ -108,17 +111,33 @@ void SephBot::trainAdditionalWorkers()
     const BWAPI::UnitType workerType = BWAPI::Broodwar->self()->getRace().getWorker();
     if (mineralsAvailable < workerType.mineralPrice()) { return; }
 
-    const int workersWanted = 20;
+    int workersWanted = 20;
+
+    if (Global::Production().checkNaturalNexus())
+    {
+        workersWanted = 40;
+    }
+
     const int workersOwned = Tools::CountUnitsOfType(workerType, BWAPI::Broodwar->self()->getUnits());
     if (workersOwned < workersWanted)
     {
         // get the unit pointer to my depot
         const BWAPI::Unit myDepot = Tools::GetDepot();
+        
+        if (Global::Production().checkNaturalNexus())
+        {
+            auto naturalPos = (Global::Map().getNaturalBase()->getDepotLocation());
+            const BWAPI::Unitset& nexusBuildings = BWAPI::Broodwar->self()->getUnits();
+            const BWAPI::Unit myNaturalDepot = Tools::GetNaturalNexus(BWAPI::Position(naturalPos), nexusBuildings);
+            
+            if (myNaturalDepot && !myNaturalDepot->isTraining()) { myNaturalDepot->train(workerType); }
+        }
 
         // if we have a valid depot unit and it's currently not training something, train a worker
         // there is no reason for a bot to ever use the unit queueing system, it just wastes resources
         if (myDepot && !myDepot->isTraining()) { myDepot->train(workerType); }
     }
+    
 }
 
 // Build more supply if we are going to run out soon
@@ -128,7 +147,10 @@ void SephBot::buildAdditionalSupply()
     const int unusedSupply = Tools::GetTotalSupply(true) - BWAPI::Broodwar->self()->supplyUsed();
 
     // If we have a sufficient amount of supply, we don't need to do anything
-    if (unusedSupply >= 2) { return; }
+    if (unusedSupply >= 2)
+    { 
+        return; 
+    }
 
     // Otherwise, we are going to build a supply provider
     const BWAPI::UnitType supplyProviderType = BWAPI::Broodwar->self()->getRace().getSupplyProvider();
@@ -203,10 +225,12 @@ void SephBot::sendScout()
 
 void SephBot::sendUnitsToAttack()
 {
-    if (!(Global::Squads().getSquadSize("Protoss_Zealot") > 3))
+    
+    if (!(Global::Squads().getSquadSize("Protoss_Zealot") > 9))
     {
         return;
     }
+    
     
     if (!Global::Map().isEnemyBaseFound())
     {
@@ -233,6 +257,11 @@ void SephBot::onUnitDestroy(BWAPI::Unit unit)
         {
             Global::Worker().removeFromResource(unit);
         }
+    }
+
+    if (unit->getType() == BWAPI::UnitTypes::Resource_Mineral_Field)
+    {
+        Global::Worker().removeResource(unit);
     }
     
 }
@@ -264,6 +293,11 @@ void SephBot::onUnitCreate(BWAPI::Unit unit)
 // Called whenever a unit finished construction, with a pointer to the unit
 void SephBot::onUnitComplete(BWAPI::Unit unit)
 {
+    if (unit->getType() == BWAPI::UnitTypes::Protoss_Probe &&
+        unit->getPlayer() == BWAPI::Broodwar->self())
+    {
+        Global::Worker().assignToMinerals(unit);
+    }
     if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot &&
         unit->getPlayer() == BWAPI::Broodwar->self())
     {

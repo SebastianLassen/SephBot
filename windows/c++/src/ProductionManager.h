@@ -31,6 +31,7 @@ public:
 	void		onFrame();	
 	void		findItemToProduce(BuildOrder & buildOrder);
 	void		assignWorkerToItem();
+	void		buildNaturalNexus();
 	void		issueProduction();
 	void		checkForStartedProduction();
 	void		trainUnit(BWAPI::UnitType type);
@@ -39,6 +40,7 @@ public:
 	void		removeFromBuildings();
 	void		removeBuildings(const std::vector<Building>& toRemove);
 	void		removeFromUnits(BWAPI::Unit unit);
+	bool		checkNaturalNexus();
 
 	int			getReservedMinerals();
 	int			getReservedGas();

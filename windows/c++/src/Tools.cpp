@@ -37,6 +37,22 @@ BWAPI::Unit Tools::GetClosestUnitTo(BWAPI::Position p, const BWAPI::Unitset& uni
     return closestUnit;
 }
 
+BWAPI::Unit Tools::GetNaturalNexus(BWAPI::Position p, const BWAPI::Unitset& units)
+{
+    BWAPI::Unit closestUnit = nullptr;
+
+    for (auto& u : units)
+    {
+        if (!closestUnit || u->getDistance(p) < closestUnit->getDistance(p)
+            && u->getType() == BWAPI::UnitTypes::Protoss_Nexus)
+        {
+            closestUnit = u;
+        }
+    }
+
+    return closestUnit;
+}
+
 BWAPI::Unit Tools::GetClosestUnitTo(BWAPI::Unit unit, const BWAPI::Unitset& units)
 {
     if (!unit) { return nullptr; }
@@ -98,6 +114,7 @@ BWAPI::Unit Tools::GetDepot()
     const BWAPI::UnitType depot = BWAPI::Broodwar->self()->getRace().getResourceDepot();
     return GetUnitOfType(depot, false);
 }
+
 
 BWAPI::Unit Tools::findBuilderUnit(const Building& b)
 {

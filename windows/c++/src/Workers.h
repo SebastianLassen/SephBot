@@ -15,7 +15,8 @@ class Workers
 {
 	friend class Global;
 
-	std::map<BWAPI::Unit, std::vector<BWAPI::Unit>> p_mineralPatches;
+	std::map<BWAPI::Unit, int>			p_mineralPatches;
+	std::map<BWAPI::Unit, BWAPI::Unit>	p_assignedPatch;
 
 public:
 	
@@ -24,7 +25,7 @@ public:
 	void		initialWorkerToMinerals();
 	void		assignToMinerals(BWAPI::Unit unit);
 	void		removeFromResource(BWAPI::Unit unit);
-	void		removeFromResource(BWAPI::Unit patch, BWAPI::Unit worker);
+	void		removeResource(BWAPI::Unit unit);
 	void		issueGatherOrder();
 
 

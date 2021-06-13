@@ -53,41 +53,22 @@ void ProductionManager::onFrame()
 	
 	if (p_buildOrder.isEmpty())
 	{
+		if (!naturalNexus)
+		{
+			if ((Tools::GetTotalSupply(true) - BWAPI::Broodwar->self()->supplyUsed() > 150) || 
+			   BWAPI::Broodwar->self()->minerals() >= 400)
+			{
+				buildNaturalNexus();
+			}
+		}
 		trainUnit(BWAPI::UnitTypes::Protoss_Zealot);
 
-		if (p_buildOrderMidGame.getSize() > 0)
+		if (p_buildOrderMidGame.getSize() > 0 && BWAPI::Broodwar->self()->supplyTotal() < 200)
 		{
 			if (p_buildOrderMidGame[0].supply <= BWAPI::Broodwar->self()->supplyUsed() / 2)
 			{
 				findItemToProduce(p_buildOrderMidGame);
 			}
-		}
-	}
-
-	if (Tools::CountUnitsOfType(BWAPI::UnitTypes::Protoss_Gateway, BWAPI::Broodwar->self()->getUnits()) == 4)
-	{
-		if (BWAPI::Broodwar->self()->minerals() > 500 && !naturalNexus)
-		{
-			BWAPI::UnitType type = BWAPI::UnitTypes::Protoss_Nexus;
-
-			p_reservedMinerals += type.mineralPrice();
-			p_reservedGas += type.gasPrice();
-
-			p_queue.addToQueue(type);
-
-			naturalNexus = true;
-
-			auto naturalBase = Global::Map().getNaturalBase();
-
-			if (naturalBase)
-			{
-				Building b(type, naturalBase->getDepotLocation());
-				p_buildings.push_back(b);
-
-
-				BWAPI::Broodwar << b.type.c_str() << std::endl;
-			}
-
 		}
 	}
 }
@@ -149,6 +130,36 @@ void ProductionManager::assignWorkerToItem()
 			b.status = BuildingStatus::Assigned;
 
 		}
+	}
+}
+
+void ProductionManager::buildNaturalNexus()
+{
+	BWAPI::UnitType type = BWAPI::UnitTypes::Protoss_Nexus;
+
+	p_reservedMinerals += type.mineralPrice();
+	p_reservedGas += type.gasPrice();
+
+	p_queue.addToQueue(type);
+
+
+
+	auto naturalBase = Global::Map().getNaturalBase();
+
+	if (naturalBase)
+	{
+		BWAPI::TilePosition basePos = naturalBase->getDepotLocation();
+		Building b(type, basePos);
+		p_buildings.push_back(b);
+		naturalNexus = true;
+
+		BWAPI::TilePosition naturalPylonPos = BWAPI::TilePosition(basePos.x + 2, basePos.y - 2);
+
+		p_queue.addToQueue(BWAPI::UnitTypes::Protoss_Pylon);
+		Building b1(BWAPI::UnitTypes::Protoss_Pylon, naturalPylonPos);
+		p_buildings.push_back(b1);
+
+		BWAPI::Broodwar << b.type.c_str() << std::endl;
 	}
 }
 
@@ -291,6 +302,11 @@ void ProductionManager::removeFromUnits(BWAPI::Unit unit)
 		p_units.erase(it);
 	}
 	*/
+}
+
+bool ProductionManager::checkNaturalNexus()
+{
+	return naturalNexus;
 }
 
 int ProductionManager::getReservedMinerals()
