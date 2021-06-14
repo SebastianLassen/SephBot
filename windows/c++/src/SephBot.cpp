@@ -75,6 +75,17 @@ void SephBot::onFrame()
        return;
     */
 
+    /* Mineral gathering amount data acqusition
+    if (BWAPI::Broodwar->getFrameCount() % 1000 == 0)
+    {
+        mineralCounting = BWAPI::Broodwar->self()->gatheredMinerals();
+        std::cout << "Total minerals gathered: " << mineralCounting << 
+        " at framecount: " << BWAPI::Broodwar->getFrameCount() << "\n";
+    }
+    */
+
+
+
 }
 
 // Send our idle workers to mine minerals so they don't just stand there
@@ -167,7 +178,7 @@ void SephBot::buildAdditionalSupply()
 // Draw some relevent information to the screen to help us debug the bot
 void SephBot::drawDebugInformation()
 {
-    BWAPI::Broodwar->drawTextScreen(BWAPI::Position(10, 10), "Hello, World!\n");
+    //BWAPI::Broodwar->drawTextScreen(BWAPI::Position(10, 10), "Hello, World!\n");
     Tools::DrawUnitCommands();
     Tools::DrawUnitBoundingBoxes();
 
@@ -201,13 +212,22 @@ void SephBot::sendScout()
             for (auto& unit : BWAPI::Broodwar->enemy()->getUnits())
             {
                 //if (unit->getType().isResourceDepot() && unit->getTilePosition() == tempPos)
-                if (unit->isVisible() && unit->getDistance(BWAPI::Position (tempPos)) <= 1200)
+                if (unit->isVisible() && unit->getDistance(BWAPI::Position (tempPos)) <= 1200
+                    && !Global::Map().isEnemyBaseFound())
                 {
                     Global::Map().isEnemyBaseFound(true);
                     Global::Map().setEnemyStartLocation(tempPos);
-                    BWAPI::Broodwar << "Found enemy base" << std::endl;
+
+                    //BWAPI::Broodwar << "Found enemy base" << std::endl;
                     p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
-                    return;
+                }
+                else if (unit->isCompleted() && unit->isVisible())
+                {
+                    if (unit->getType().getRace() != BWAPI::Races::Unknown)
+                    {
+                        std::cout << "Enemy race: " << unit->getType().getRace() << "\n";
+                        return;
+                    }
                 }
             }
         }
@@ -273,7 +293,7 @@ void SephBot::onUnitDestroy(BWAPI::Unit unit)
         else
         {
             Global::Squads().removeFromSquad(unit);
-            std::cout << Global::Squads().getSquadSize("Protoss_Zealot") << "\n";
+            //std::cout << Global::Squads().getSquadSize("Protoss_Zealot") << "\n";
         }
     }
 
@@ -310,17 +330,21 @@ void SephBot::onUnitCreate(BWAPI::Unit unit)
 // Called whenever a unit finished construction, with a pointer to the unit
 void SephBot::onUnitComplete(BWAPI::Unit unit)
 {
-    if (unit->getType() == BWAPI::UnitTypes::Protoss_Probe &&
-        unit->getPlayer() == BWAPI::Broodwar->self())
+    if (unit->getPlayer() == BWAPI::Broodwar->self())
     {
-        Global::Worker().assignToMinerals(unit);
-    }
-    if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot &&
-        unit->getPlayer() == BWAPI::Broodwar->self())
-    {
-        Global::Squads().addToSquad(unit);
-        unit->attack(Global::Map().getMainChoke()->center);
-
+        if (unit->getType() == BWAPI::UnitTypes::Protoss_Probe)
+        {
+            Global::Worker().assignToMinerals(unit);
+        }
+        else if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot)
+        {
+            Global::Squads().addToSquad(unit);
+        }
+        /*
+        else if (unit->getType() == BWAPI::UnitTypes::Protoss_Gateway)
+        {
+        }
+        */
     }
 }
 

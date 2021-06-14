@@ -9,6 +9,8 @@ class SephBot
 {
 
 	BWAPI::Unit p_scout = nullptr;
+	
+	int mineralCounting = 0;
 
 public:
 
