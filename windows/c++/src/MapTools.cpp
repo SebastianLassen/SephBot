@@ -444,6 +444,59 @@ BWAPI::TilePosition MapTools::getSelfStartLocation()
     return BWAPI::TilePositions::None;
 }
 
+BWAPI::Position MapTools::scoutClosestStartingLocation(BWAPI::Unit unit, std::map<int, BWAPI::TilePosition>& locationMap)
+{
+    if (!unit) { return BWAPI::Positions::None; }
+
+    BWAPI::Position bestPos = BWAPI::Position(locationMap.begin()->second);
+
+    Global::Map().setEnemyStartLocation(locationMap.begin()->second);
+
+    if (BWAPI::Broodwar->isExplored(locationMap.begin()->second))
+    {
+        std::cout << "\nStart location at: " << locationMap.begin()->second 
+                  << " With a distance in pixels " << locationMap.begin()->first
+                  << "\nFrom our start location wasn't the enemy's starting location " << "\n";
+
+        locationMap.erase(locationMap.begin());
+        bestPos = BWAPI::Position(locationMap.begin()->second);
+
+        std::cout << "\nMoving to start location: " << locationMap.begin()->second
+                  << " with a distance in pixels of: " << locationMap.begin()->first << "\n";
+
+    }
+    /*
+    BWAPI::Position bestPos = BWAPI::Positions::None;
+    
+    int bestDist = INT_MAX;
+    int dist = 0;
+
+    for (auto startLocation : BWAPI::Broodwar->getStartLocations())
+    {
+        if (!BWAPI::Broodwar->isExplored(startLocation) && unit)
+        {
+
+            BWEM::Map::Instance().GetPath(unit->getPosition(),
+                BWAPI::Position(startLocation),
+                &dist);
+
+            std::cout << "Distance to start location scout target : " << dist << "\n";
+
+            if (dist == -1 || dist > bestDist) { continue; }
+
+            Global::Map().setEnemyStartLocation(startLocation);
+            bestDist = dist;
+            bestPos = BWAPI::Position(startLocation);
+        }
+    }
+    */
+
+    //std::cout << "Distance to best start location scout target : " << dist << "\n";
+
+    return bestPos;
+    
+}
+
 std::vector<Base*>& MapTools::getAllBases()
 {
     return p_bases;

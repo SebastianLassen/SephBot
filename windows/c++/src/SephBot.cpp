@@ -30,6 +30,25 @@ void SephBot::onStart()
     Global::Production().onStart();
     Global::Worker().initialWorkerToMinerals();
 
+    int dist = 0;
+
+    for (auto startLocation : BWAPI::Broodwar->getStartLocations())
+    {
+        if (startLocation == BWAPI::Broodwar->self()->getStartLocation()) { continue; }
+
+        BWEM::Map::Instance().GetPath(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()),
+            BWAPI::Position(startLocation),
+            &dist);
+
+        startingLocationMap[dist] = startLocation;
+    }
+
+    for (auto& distLocation : startingLocationMap)
+    {
+        std::cout << "There is " << distLocation.first << " pixels of distance to start location: " 
+                  << distLocation.second << "\n";
+    }
+    std::cout << "\n";
 }
 
 // Called whenever the game ends and tells you if you won or not
@@ -193,6 +212,11 @@ void SephBot::drawDebugInformation()
 
 void SephBot::sendScout()
 {
+    if (BWAPI::Broodwar->getFrameCount() % BWAPI::Broodwar->getLatencyFrames() != 0)
+    {
+        return;
+    }
+
     if (Global::Map().isEnemyBaseFound() && Global::Map().getEnemyMain())
     {
         return;
@@ -202,6 +226,7 @@ void SephBot::sendScout()
     {
         p_scout = Tools::GetUnitOfType(BWAPI::Broodwar->self()->getRace().getWorker(), true);
     }
+
 
     BWAPI::TilePosition tempPos = Global::Map().getEnemyStartLocation();
 
@@ -225,24 +250,52 @@ void SephBot::sendScout()
                 {
                     if (unit->getType().getRace() != BWAPI::Races::Unknown)
                     {
-                        std::cout << "Enemy race: " << unit->getType().getRace() << "\n";
+                        int seconds = BWAPI::Broodwar->getFrameCount()/24;
+                        int minutes = seconds/60;
+                        seconds %= 60;
+
+                        std::cout << "Found enemy starting location at: " 
+                                  << startingLocationMap.begin()->second 
+                                  << "\nWhich had the distance from our starting location in pixels: "
+                                  << startingLocationMap.begin()->first
+                                  << "\nIt took: " << BWAPI::Broodwar->getFrameCount()
+                                  << " amount of frames and " << minutes
+                                  << " minutes and " << seconds
+                                  << " seconds in in-game time to find it \n"
+                                  << "The enemy's race is: " << unit->getType().getRace() << "\n";
+
+
+
+
+                        p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
                         return;
                     }
                 }
             }
         }
     }
-
-    for (auto startLocation : BWAPI::Broodwar->getStartLocations())
+    /*
+    BWAPI::Position startPos = BWAPI::Position(startingLocationMap.begin()->second);
+    if (startPos != p_scout->getOrderTargetPosition() && p_scout &&
+        p_scout->isCompleted())
     {
-        if (!BWAPI::Broodwar->isExplored(startLocation) && p_scout)
-        {
-            Global::Map().setEnemyStartLocation(startLocation);
-            p_scout->move(BWAPI::Position(startLocation));
-            BWAPI::Broodwar->drawCircleMap(BWAPI::Position(startLocation), 32, BWAPI::Colors::Purple);
-            break;
-        }
+        p_scout->move(startPos);
+        BWAPI::Broodwar->drawCircleMap(startPos, 32, BWAPI::Colors::Purple);
     }
+    else if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(startPos)))
+    {
+        startingLocationMap.erase(startingLocationMap.begin());
+    }
+    */
+
+    
+    BWAPI::Position startLocationPos = Global::Map().scoutClosestStartingLocation(p_scout, startingLocationMap);
+    if (startLocationPos != BWAPI::Positions::None)
+    {
+        p_scout->move(startLocationPos);
+        BWAPI::Broodwar->drawCircleMap(startLocationPos, 32, BWAPI::Colors::Purple);
+    }
+    
 }
 
 void SephBot::sendUnitsToAttack()

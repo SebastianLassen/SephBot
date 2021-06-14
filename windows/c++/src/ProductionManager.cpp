@@ -120,6 +120,12 @@ void ProductionManager::assignWorkerToItem()
 			// ---------------------------------
 			//p_buildingPlacer.getBuildingLocation(b);
 
+			if (buildPos == Global::Map().getNaturalBase()->getDepotLocation() &&
+				b.type != BWAPI::UnitTypes::Protoss_Nexus)
+			{
+				continue;
+			}
+
 			if (!buildPos.isValid())
 			{
 				continue;

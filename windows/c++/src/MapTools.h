@@ -77,6 +77,7 @@ public:
     bool                  isEnemyBaseFound(bool found = false);
     BWAPI::TilePosition   getEnemyStartLocation();
     BWAPI::TilePosition   getSelfStartLocation();
+    BWAPI::Position       scoutClosestStartingLocation(BWAPI::Unit unit, std::map<int, BWAPI::TilePosition>& locationMap);
 
     std::vector<Base*>&  getAllBases();
     std::vector<Base*>   getMyBases();
