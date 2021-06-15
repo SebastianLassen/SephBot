@@ -11,7 +11,7 @@ class SephBot
 	BWAPI::Unit p_scout = nullptr;
 	std::map<int, BWAPI::TilePosition> startingLocationMap;
 	
-	int mineralCounting = 0;
+	//int mineralCounting = 0;
 
 public:
 
