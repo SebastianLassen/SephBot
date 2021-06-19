@@ -1,4 +1,5 @@
 #include "ProductionManager.h"
+#include "Workers.h"
 #include "Tools.h"
 #include "Global.h"
 #include "MapTools.h"
