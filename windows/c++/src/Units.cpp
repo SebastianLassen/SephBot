@@ -4,16 +4,6 @@ Units::Units()
 	: lostMinerals(0)
 	, lostGas(0)
 {
-	/*
-	int maxTypeID(0);
-	for (const BWAPI::UnitType& t : BWAPI::UnitTypes::allUnitTypes())
-	{
-		maxTypeID = maxTypeID > t.getID() ? maxTypeID : t.getID();
-	}
-
-	deadUnits = std::vector<int>(maxTypeID + 1, 0);
-	liveUnits = std::vector<int>(maxTypeID + 1, 0);
-	*/
 }
 
 void Units::addUnitUpdate(BWAPI::Unit unit)

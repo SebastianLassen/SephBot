@@ -93,6 +93,5 @@ public:
     ChokePoints*    getEnemyMainChoke();
     ChokePoints*    getEnemyNaturalChoke();
 
-    void                  testAssertFunction();
     void                  drawTestTiles();
 };

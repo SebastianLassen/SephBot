@@ -1,27 +1,6 @@
 #include "Tools.h"
 #include "BuildingData.h"
 
-/*
-BWAPI::Unit Tools::getClosestMineral(BWAPI::Unit myUnit)
-{
-    BWAPI::Unit closestMineral = nullptr;
-    int minDist = std::numeric_limits<int>::max();
-    for (auto& unit : BWAPI::Broodwar->getNeutralUnits())
-    {
-        // test to see if mineral
-        int dist = unit->getDistance(myUnit);
-        if (dist < minDist)
-        {
-            minDist = dist;
-            closestMineral = unit;
-        }
-    }
-    return closestMineral;
-}
-
-
-*/
-
 BWAPI::Unit Tools::GetClosestUnitTo(BWAPI::Position p, const BWAPI::Unitset& units)
 {
     BWAPI::Unit closestUnit = nullptr;

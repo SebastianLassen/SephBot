@@ -408,15 +408,6 @@ bool MapTools::isEnemyBaseFound(bool found)
 
 BWAPI::TilePosition MapTools::getEnemyStartLocation()
 {
-    /*
-    for (auto& base : p_bases)
-    {
-        if (base->getOwner() == BWAPI::Broodwar->enemy() && base->isStartLocation())
-        {
-            return base->getDepotLocation();
-        }
-    }
-    */
     if (enemyMain)
     {
         return enemyMain->getDepotLocation();
@@ -427,15 +418,6 @@ BWAPI::TilePosition MapTools::getEnemyStartLocation()
 
 BWAPI::TilePosition MapTools::getSelfStartLocation()
 {
-    /*
-    for (auto& base : p_bases)
-    {
-        if (base->getOwner() == BWAPI::Broodwar->self() && base->isStartLocation())
-        {
-            return base->getDepotLocation();
-        }
-    }
-    */
     if (myMain)
     {
         return myMain->getDepotLocation();
@@ -465,33 +447,6 @@ BWAPI::Position MapTools::scoutClosestStartingLocation(BWAPI::Unit unit, std::ma
                   << " with a distance in pixels of: " << locationMap.begin()->first << "\n";
 
     }
-    /*
-    BWAPI::Position bestPos = BWAPI::Positions::None;
-    
-    int bestDist = INT_MAX;
-    int dist = 0;
-
-    for (auto startLocation : BWAPI::Broodwar->getStartLocations())
-    {
-        if (!BWAPI::Broodwar->isExplored(startLocation) && unit)
-        {
-
-            BWEM::Map::Instance().GetPath(unit->getPosition(),
-                BWAPI::Position(startLocation),
-                &dist);
-
-            std::cout << "Distance to start location scout target : " << dist << "\n";
-
-            if (dist == -1 || dist > bestDist) { continue; }
-
-            Global::Map().setEnemyStartLocation(startLocation);
-            bestDist = dist;
-            bestPos = BWAPI::Position(startLocation);
-        }
-    }
-    */
-
-    //std::cout << "Distance to best start location scout target : " << dist << "\n";
 
     return bestPos;
     
@@ -549,10 +504,7 @@ Base* MapTools::getEnemyMain()
 
 Base* MapTools::getEnemyNatural()
 {
-    assert(1 == 2);
-
-
-    return nullptr;
+    return enemyNatural;
 }
 
 ChokePoints* MapTools::getMainChoke()
@@ -573,12 +525,6 @@ ChokePoints* MapTools::getEnemyMainChoke()
 ChokePoints* MapTools::getEnemyNaturalChoke()
 {
     return enemyNaturalChokePoint;
-}
-
-void MapTools::testAssertFunction()
-{
-    assert(1 == 2);
-
 }
 
 void MapTools::drawTestTiles()

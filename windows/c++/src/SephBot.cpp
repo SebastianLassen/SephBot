@@ -87,11 +87,6 @@ void SephBot::onFrame()
     // Draw some relevent information to the screen to help us debug the bot
     drawDebugInformation();
 
-    /* TO MAKE SURE THAT ONFRAME ISNT RUN TOO MUCH - MIGHT NEED LATER
-    if (BWAPI::Broodwar->getFrameCount() % BWAPI::Broodwar->getLatencyFrames() != 0)
-       return;
-    */
-
     /* Mineral gathering amount data acqusition
     if (BWAPI::Broodwar->getFrameCount() % 1000 == 0)
     {
@@ -118,8 +113,8 @@ void SephBot::sendIdleWorkersToMinerals()
         if (unit->getType().isWorker() && unit->isIdle())
         {
             Global::Worker().assignToMinerals(unit);
-            //unit->gather(unit->getClosestUnit(BWAPI::Filter::IsMineralField || BWAPI::Filter::IsRefinery));
-            /*
+
+            /* OLD METHOD OF GATHERING ISSUING ORDERS TO GATHER MINERALS, REPLACED BY THE OPTIMIZATION
             // Get the closest mineral to this worker unit
             BWAPI::Unit closestMineral = Tools::GetClosestUnitTo(unit, BWAPI::Broodwar->getMinerals());
 
@@ -234,47 +229,7 @@ void SephBot::sendScout()
     {
         if (BWAPI::Broodwar->isVisible(tempPos) || BWAPI::Broodwar->isExplored(tempPos))
         {
-            /*
-            for (auto& unit : BWAPI::Broodwar->enemy()->getUnits())
-            {
-                //if (unit->getType().isResourceDepot() && unit->getTilePosition() == tempPos)
-                if (unit->isVisible() && unit->getDistance(BWAPI::Position (tempPos)) <= 1200
-                    && !Global::Map().isEnemyBaseFound())
-                {
-                    Global::Map().isEnemyBaseFound(true);
-                    Global::Map().setEnemyStartLocation(tempPos);
-
-                    //BWAPI::Broodwar << "Found enemy base" << std::endl;
-                    p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
-                }
-                else if (unit->isCompleted() && unit->isVisible())
-                {
-                    if (unit->getType().getRace() != BWAPI::Races::Unknown)
-                    {
-                        int seconds = BWAPI::Broodwar->getFrameCount()/24;
-                        int minutes = seconds/60;
-                        seconds %= 60;
-
-                        std::cout << "Found enemy starting location at: " 
-                                  << startingLocationMap.begin()->second 
-                                  << "\nWhich had the distance from our starting location in pixels: "
-                                  << startingLocationMap.begin()->first
-                                  << "\nIt took: " << BWAPI::Broodwar->getFrameCount()
-                                  << " amount of frames and " << minutes
-                                  << " minutes and " << seconds
-                                  << " seconds in in-game time to find it \n"
-                                  << "The enemy's race is: " << unit->getType().getRace() << "\n";
-
-
-
-
-                        p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
-                        return;
-                    }
-                }
-            }
-            */
-
+           
             for (auto& unit : BWAPI::Broodwar->enemy()->getUnits())
             {
                 if (unit->isVisible() && unit->getDistance(BWAPI::Position(tempPos)) <= 1200
@@ -301,29 +256,12 @@ void SephBot::sendScout()
                             << " seconds in in-game time to find it \n"
                             << "The enemy's race is: " << unit->getType().getRace() << "\n";
 
-
-
-
-                        //p_scout->move(BWAPI::Position(Global::Map().getSelfStartLocation()));
                         return;
                     }
                 }
             }
         }
     }
-    /*
-    BWAPI::Position startPos = BWAPI::Position(startingLocationMap.begin()->second);
-    if (startPos != p_scout->getOrderTargetPosition() && p_scout &&
-        p_scout->isCompleted())
-    {
-        p_scout->move(startPos);
-        BWAPI::Broodwar->drawCircleMap(startPos, 32, BWAPI::Colors::Purple);
-    }
-    else if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(startPos)))
-    {
-        startingLocationMap.erase(startingLocationMap.begin());
-    }
-    */
 
     
     BWAPI::Position startLocationPos = Global::Map().scoutClosestStartingLocation(p_scout, startingLocationMap);
@@ -353,20 +291,10 @@ void SephBot::sendUnitsToAttack()
 
     for (auto& unit : Global::Squads().getSquad("Protoss_Zealot").units)
     {
-        if (!unit->isIdle() && unit->isAttacking()) { continue; }
+        if (!unit->isIdle()) { continue; }
 
-        if (unit->isUnderAttack())
-        {
-            unit->attack(unit->getPosition());
-        }
-        else if (unit->getDistance(pos) < 10 && !unit->isAttacking())
-        {
-            unit->attack(unit->getClosestUnit(BWAPI::Filter::IsEnemy));
-        }
-        else
-        {
-            unit->attack(pos);
-        }
+        unit->attack(pos);
+
     }
 }
 
@@ -430,11 +358,6 @@ void SephBot::onUnitComplete(BWAPI::Unit unit)
         {
             Global::Squads().addToSquad(unit);
         }
-        /*
-        else if (unit->getType() == BWAPI::UnitTypes::Protoss_Gateway)
-        {
-        }
-        */
     }
 }
 
@@ -458,22 +381,3 @@ void SephBot::onUnitRenegade(BWAPI::Unit unit)
 { 
 	
 }
-
-
-
-/*              EXAMPLE OF A COUNTDOWN TIMER USING REGISTER EVENT
-void ExampleAIModule::onStart()
-{
-// Register a callback that only occurs once when the countdown timer reaches 0
-if ( BWAPI::Broodwar->getGameType() == BWAPI::GameTypes::Capture_The_Flag ||
-BWAPI::Broodwar->getGameType() == BWAPI::GameTypes::Team_Capture_The_Flag )
- {
-BWAPI::Broodwar->registerEvent([](BWAPI::Game*){ BWAPI::Broodwar->sendText("Try to find my flag!"); }, // action
- [](BWAPI::Game*){ returnBWAPI::Broodwar->countdownTimer() == 0; }, // condition
- 1); // times to run (once)
- }
-}
-
-
-
-*/

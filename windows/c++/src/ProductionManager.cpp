@@ -57,7 +57,7 @@ void ProductionManager::onFrame()
 		if (!naturalNexus)
 		{
 			if ((Tools::GetTotalSupply(true) - BWAPI::Broodwar->self()->supplyUsed() > 150) || 
-			   BWAPI::Broodwar->self()->minerals() >= 400)
+			   BWAPI::Broodwar->self()->minerals() >= 500)
 			{
 				buildNaturalNexus();
 			}
@@ -183,24 +183,6 @@ void ProductionManager::issueProduction()
 			b.buildCommandGiven = true;
 		}
 	}
-
-
-	/*
-	if (type.isBuilding())
-	{
-		// Attempt to build the type if it's a building
-		const bool startedBuilding = Tools::BuildBuilding(type);
-		if (startedBuilding)
-		{
-			BWAPI::Broodwar->printf("Started Building %s", type.getName().c_str());
-		}
-	}
-	else
-	{
-		// Else if the type is that of a unit then train it
-		trainUnit(type);
-	}
-	*/
 }
 
 void ProductionManager::checkForStartedProduction()
@@ -261,7 +243,7 @@ void ProductionManager::addToBuildings(BWAPI::Unit unit)
 
 void ProductionManager::addToUnits(BWAPI::Unit unit)
 {
-	//p_units or something PROBABLY IN ANOTHER FILE
+
 }
 
 void ProductionManager::removeFromBuildings()
@@ -282,8 +264,6 @@ void ProductionManager::removeFromBuildings()
 	}
 
 	removeBuildings(toRemove);
-	// If the building successfully constructed, 
-	//all actors should be either 'reset' or nullptr
 }
 
 void ProductionManager::removeBuildings(const std::vector<Building>& toRemove)
